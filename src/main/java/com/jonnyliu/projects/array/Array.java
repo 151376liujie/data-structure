@@ -127,15 +127,16 @@ public class Array<E> {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
-        if (getSize() < getCapacity() / 2) {
-            resize(getCapacity() / 2);
-        }
         E datum = this.data[index];
         for (int j = index; j < getSize(); j++) {
             this.data[j] = this.data[j + 1];
         }
         this.size--;
         this.data[this.size] = null;
+        //缩容
+        if (getSize() <= getCapacity() / 4 && getCapacity() / 2 != 0) {
+            resize(getCapacity() / 2);
+        }
         return datum;
     }
 

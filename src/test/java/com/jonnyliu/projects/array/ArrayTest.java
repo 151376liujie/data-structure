@@ -1,5 +1,7 @@
 package com.jonnyliu.projects.array;
 
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -8,16 +10,35 @@ import org.junit.Test;
  */
 public class ArrayTest {
 
+    private Array<Integer> array;
+
+    @Before
+    public void init() {
+        this.array = new Array<>(10);
+        Assert.assertTrue(this.array.isEmpty());
+        Assert.assertEquals(10, this.array.getCapacity());
+    }
+
     @Test
     public void getSize() {
+        Assert.assertTrue(this.array.isEmpty());
+        this.array.addLast(1);
+        Assert.assertEquals(1, this.array.getSize());
+        Assert.assertEquals(10, this.array.getCapacity());
     }
 
     @Test
     public void isEmpty() {
+        Assert.assertTrue(this.array.isEmpty());
+        this.array.addLast(1);
+        Assert.assertFalse(this.array.isEmpty());
     }
 
     @Test
     public void getCapacity() {
+        Assert.assertEquals(10, this.array.getCapacity());
+        this.array.addLast(1);
+        Assert.assertEquals(10, this.array.getCapacity());
     }
 
     @Test
