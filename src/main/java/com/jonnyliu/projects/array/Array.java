@@ -3,8 +3,9 @@ package com.jonnyliu.projects.array;
 import java.util.Arrays;
 
 /**
- * Author: jonny
  * Time: 2018-11-04 22:20.
+ *
+ * @author jonny
  */
 public class Array<E> {
 
@@ -20,8 +21,8 @@ public class Array<E> {
     private int size;
 
     public Array(int capacity) {
-        this.data = (E[]) new Object[capacity];
-        this.size = 0;
+        data = (E[]) new Object[capacity];
+        size = 0;
     }
 
     public Array() {
@@ -40,7 +41,7 @@ public class Array<E> {
      * @return
      */
     public int getSize() {
-        return this.size;
+        return size;
     }
 
     /**
@@ -58,7 +59,7 @@ public class Array<E> {
      * @return
      */
     public int getCapacity() {
-        return this.data.length;
+        return data.length;
     }
 
     /**
@@ -94,10 +95,10 @@ public class Array<E> {
             resize(getCapacity() * 2);
         }
         for (int i = getSize() - 1; i >= index; i--) {
-            this.data[i + 1] = this.data[i];
+            data[i + 1] = data[i];
         }
-        this.data[index] = e;
-        this.size++;
+        data[index] = e;
+        size++;
     }
 
     /**
@@ -111,8 +112,8 @@ public class Array<E> {
             return;
         }
         E[] newData = (E[]) new Object[newCapacity];
-        System.arraycopy(this.data, 0, newData, 0, getSize());
-        this.data = newData;
+        System.arraycopy(data, 0, newData, 0, getSize());
+        data = newData;
     }
 
     /**
@@ -122,8 +123,8 @@ public class Array<E> {
      * @return
      */
     public boolean contains(E e) {
-        for (int i = 0; i < this.data.length; i++) {
-            if (e.equals(this.data[i])) {
+        for (int i = 0; i < data.length; i++) {
+            if (e.equals(data[i])) {
                 return true;
             }
         }
@@ -140,7 +141,7 @@ public class Array<E> {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
-        return this.data[index];
+        return data[index];
     }
 
     /**
@@ -172,8 +173,8 @@ public class Array<E> {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
-        E ss = this.data[index];
-        this.data[index] = e;
+        E ss = data[index];
+        data[index] = e;
         return ss;
     }
 
@@ -184,8 +185,8 @@ public class Array<E> {
      * @return
      */
     public int find(E e) {
-        for (int i = 0; i < this.data.length; i++) {
-            if (e.equals(this.data[i])) {
+        for (int i = 0; i < data.length; i++) {
+            if (e.equals(data[i])) {
                 return i;
             }
         }
@@ -231,12 +232,12 @@ public class Array<E> {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
-        E datum = this.data[index];
+        E datum = data[index];
         for (int j = index + 1; j < getSize(); j++) {
-            this.data[j - 1] = this.data[j];
+            data[j - 1] = data[j];
         }
-        this.size--;
-        this.data[this.size] = null;
+        size--;
+        data[size] = null;
 
         //缩容
         if (getSize() <= getCapacity() / 4 && getCapacity() / 2 != 0) {
@@ -253,26 +254,8 @@ public class Array<E> {
                 .append("{")
                 .append("capacity : " + getCapacity())
                 .append(", size: " + getSize())
-                .append(", data: " + Arrays.toString(this.data))
+                .append(", data: " + Arrays.toString(data))
                 .append("}");
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        Array<Integer> array = new Array<>();
-        for (int i = 0; i < 11; i++) {
-            array.addLast(i);
-        }
-        System.out.println(array);
-        array.add(2, 99);
-        System.out.println(array);
-
-        array.remove(2);
-        System.out.println(array);
-        array.remove(0);
-        System.out.println(array);
-
-        array.removeFirst();
-        System.out.println(array);
     }
 }

@@ -45,13 +45,13 @@ public class ArrayTest {
     public void addLast() {
         Assert.assertEquals(10, this.array.getCapacity());
         for (int i = 0; i < 10; i++) {
-            array.addLast(i);
+            this.array.addLast(i);
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(10, this.array.getSize());
 
 
-        array.addLast(10);
+        this.array.addLast(10);
         Assert.assertEquals(20, this.array.getCapacity());
         Assert.assertEquals(11, this.array.getSize());
     }
@@ -60,13 +60,13 @@ public class ArrayTest {
     public void addFirst() {
         Assert.assertEquals(10, this.array.getCapacity());
         for (int i = 0; i < 10; i++) {
-            array.addLast(i);
+            this.array.addLast(i);
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(10, this.array.getSize());
 
 
-        array.addLast(10);
+        this.array.addLast(10);
         Assert.assertEquals(20, this.array.getCapacity());
         Assert.assertEquals(11, this.array.getSize());
     }
@@ -75,18 +75,18 @@ public class ArrayTest {
     public void add() {
         Assert.assertEquals(10, this.array.getCapacity());
         for (int i = 0; i < 10; i++) {
-            array.addLast(i);
+            this.array.addLast(i);
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(10, this.array.getSize());
 
 
-        array.addLast(10);
+        this.array.addLast(10);
         Assert.assertEquals(20, this.array.getCapacity());
         Assert.assertEquals(11, this.array.getSize());
 
         for (int i = 0; i < 6; i++) {
-            array.removeLast();
+            this.array.removeLast();
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(5, this.array.getSize());
@@ -94,33 +94,33 @@ public class ArrayTest {
 
     @Test
     public void contains() {
-        Assert.assertFalse(array.contains(111));
-        array.addLast(123);
-        Assert.assertTrue(array.contains(123));
+        Assert.assertFalse(this.array.contains(111));
+        this.array.addLast(123);
+        Assert.assertTrue(this.array.contains(123));
     }
 
     @Test
     public void get() {
         for (int i = 0; i < 10; i++) {
-            array.addLast(i);
+            this.array.addLast(i);
         }
-        Integer integer = array.get(5);
+        Integer integer = this.array.get(5);
         Assert.assertEquals(integer.intValue(), 5);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void set() {
-        array.set(0, 0);
+        this.array.set(0, 0);
     }
 
     @Test
     public void set2() {
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(0, this.array.getSize());
-        array.addLast(2);
+        this.array.addLast(2);
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(1, this.array.getSize());
-        array.set(0, 4);
+        this.array.set(0, 4);
         Assert.assertEquals(4, this.array.get(0).intValue());
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(1, this.array.getSize());
@@ -128,53 +128,112 @@ public class ArrayTest {
 
     @Test
     public void find() {
-        array.addLast(2);
-        int i = array.find(2);
+        this.array.addLast(2);
+        int i = this.array.find(2);
         Assert.assertEquals(0, i);
-        Assert.assertEquals(-1, array.find(5));
+        Assert.assertEquals(-1, this.array.find(5));
 
     }
 
     @Test
     public void removeFirst() {
         for (int i = 0; i < 10; i++) {
-            array.addLast(i);
+            this.array.addLast(i);
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(10, this.array.getSize());
 
         for (int i = 0; i < 10; i++) {
-            array.removeLast();
+            this.array.removeFirst();
         }
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(0, this.array.getSize());
 
-        array.addLast(5);
+        this.array.addLast(5);
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(1, this.array.getSize());
 
-        array.addLast(6);
+        this.array.addLast(6);
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(2, this.array.getSize());
 
-        array.addLast(7);
+        this.array.addLast(7);
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(3, this.array.getSize());
 
-        array.addLast(8);
+        this.array.addLast(8);
         Assert.assertEquals(10, this.array.getCapacity());
         Assert.assertEquals(4, this.array.getSize());
     }
 
     @Test
     public void removeLast() {
+        for (int i = 0; i < 10; i++) {
+            this.array.addLast(i);
+        }
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(10, this.array.getSize());
+
+        for (int i = 0; i < 10; i++) {
+            this.array.removeLast();
+        }
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(0, this.array.getSize());
+
+        this.array.addLast(5);
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(1, this.array.getSize());
+
+        this.array.addLast(6);
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(2, this.array.getSize());
+
+        this.array.addLast(7);
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(3, this.array.getSize());
+
+        this.array.addLast(8);
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(4, this.array.getSize());
     }
 
     @Test
     public void removeElement() {
+        for (int i = 0; i < 10; i++) {
+            this.array.addLast(i);
+        }
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(10, this.array.getSize());
+
+        this.array.addLast(10);
+        Assert.assertEquals(20, this.array.getCapacity());
+        Assert.assertEquals(11, this.array.getSize());
+
+        for (int i = 0; i < 10; i++) {
+            this.array.removeElement(i);
+        }
+
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(1, this.array.getSize());
     }
 
     @Test
     public void remove() {
+        for (int i = 0; i < 10; i++) {
+            this.array.addLast(i);
+        }
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(10, this.array.getSize());
+
+        this.array.addLast(10);
+        Assert.assertEquals(20, this.array.getCapacity());
+        Assert.assertEquals(11, this.array.getSize());
+
+        for (int i = 0; i < 10; i++) {
+            this.array.remove(0);
+        }
+
+        Assert.assertEquals(10, this.array.getCapacity());
+        Assert.assertEquals(1, this.array.getSize());
     }
 }
