@@ -29,30 +29,62 @@ public class Array<E> {
     }
 
     public Array(E[] data) {
-        this.data = data;
-        this.size = data.length;
+        for (E datum : data) {
+            addLast(datum);
+        }
     }
 
+    /**
+     * 返回实际元素个数
+     *
+     * @return
+     */
     public int getSize() {
         return this.size;
     }
 
+    /**
+     * 判断数组是否为空
+     *
+     * @return
+     */
     public boolean isEmpty() {
         return getSize() == 0;
     }
 
+    /**
+     * 返回数组最大容量
+     *
+     * @return
+     */
     public int getCapacity() {
         return this.data.length;
     }
 
+    /**
+     * 在数组最后添加元素
+     *
+     * @param e
+     */
     public void addLast(E e) {
         add(getSize(), e);
     }
 
+    /**
+     * 在数组开头添加元素
+     *
+     * @param e
+     */
     public void addFirst(E e) {
         add(0, e);
     }
 
+    /**
+     * 在指定索引位置添加元素
+     *
+     * @param index
+     * @param e
+     */
     public void add(int index, E e) {
         if (index > getSize() || index < 0) {
             throw new IllegalArgumentException("invalid index: " + index + " ,index must be greater than 0 and less than size");
@@ -68,12 +100,27 @@ public class Array<E> {
         this.size++;
     }
 
+    /**
+     * 数组扩容或缩容
+     *
+     * @param newCapacity 新的数组容量
+     */
     private void resize(int newCapacity) {
+        //如果需要设置的新容量小于数组默认容量，则不进行扩容
+        if (newCapacity < DEFAULT_CAPACITY) {
+            return;
+        }
         E[] newData = (E[]) new Object[newCapacity];
         System.arraycopy(this.data, 0, newData, 0, getSize());
         this.data = newData;
     }
 
+    /**
+     * 数组中是否包含指定元素
+     *
+     * @param e
+     * @return
+     */
     public boolean contains(E e) {
         for (int i = 0; i < this.data.length; i++) {
             if (e.equals(this.data[i])) {
@@ -83,6 +130,12 @@ public class Array<E> {
         return false;
     }
 
+    /**
+     * 获取指定索引位置上的元素
+     *
+     * @param index
+     * @return
+     */
     public E get(int index) {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
@@ -90,6 +143,31 @@ public class Array<E> {
         return this.data[index];
     }
 
+    /**
+     * 获取开头位置元素
+     *
+     * @return
+     */
+    public E getFirst() {
+        return get(0);
+    }
+
+    /**
+     * 获取最后位置元素
+     *
+     * @return
+     */
+    public E getLast() {
+        return get(size - 1);
+    }
+
+    /**
+     * 在指定索引位置上设置元素
+     *
+     * @param index
+     * @param e
+     * @return
+     */
     public E set(int index, E e) {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
@@ -99,6 +177,12 @@ public class Array<E> {
         return ss;
     }
 
+    /**
+     * 查找指定元素所在索引(第一次)
+     *
+     * @param e
+     * @return
+     */
     public int find(E e) {
         for (int i = 0; i < this.data.length; i++) {
             if (e.equals(this.data[i])) {
@@ -108,14 +192,29 @@ public class Array<E> {
         return -1;
     }
 
+    /**
+     * 删除开头位置元素
+     *
+     * @return
+     */
     public E removeFirst() {
         return remove(0);
     }
 
+    /**
+     * 删除最后位置元素
+     *
+     * @return
+     */
     public E removeLast() {
         return remove(getSize() - 1);
     }
 
+    /**
+     * 删除指定元素
+     *
+     * @param e
+     */
     public void removeElement(E e) {
         int index = find(e);
         if (index >= 0) {
@@ -123,16 +222,22 @@ public class Array<E> {
         }
     }
 
+    /**
+     * 删除指定索引位置的元素
+     *
+     * @param index
+     */
     public E remove(int index) {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
         E datum = this.data[index];
-        for (int j = index; j < getSize(); j++) {
-            this.data[j] = this.data[j + 1];
+        for (int j = index + 1; j < getSize(); j++) {
+            this.data[j - 1] = this.data[j];
         }
         this.size--;
         this.data[this.size] = null;
+
         //缩容
         if (getSize() <= getCapacity() / 4 && getCapacity() / 2 != 0) {
             resize(getCapacity() / 2);

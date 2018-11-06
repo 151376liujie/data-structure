@@ -33,6 +33,14 @@ hs_err_pid*
 
 .idea/
 data-structure.iml
-src/main/java/com/jonnyliu/projects/App.java
-src/test/java/com/jonnyliu/projects/AppTest.java
 target/
+### Maven template
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
