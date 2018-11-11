@@ -1,5 +1,8 @@
 package com.jonnyliu.projects.queue;
 
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 /**
  * Project Name: data-structure
  * Package Name: com.jonnyliu.projects.queue
@@ -31,6 +34,10 @@ public class LoopArrayQueue<E> implements Queue<E> {
         size = 0;
     }
 
+    private int getCapacity() {
+        return data.length - 1;
+    }
+
     @Override
     public int getSize() {
         return size;
@@ -43,16 +50,54 @@ public class LoopArrayQueue<E> implements Queue<E> {
 
     @Override
     public void enqueue(E e) {
+        if (front == (tail + 1) % data.length) {
+            resize(getCapacity() * 2);
+        }
+        data[tail] = e;
+        tail = (tail + 1) % data.length;
+        size++;
+    }
 
+    private void resize(int newCapacity) {
+        E[] newData = (E[]) new Object[newCapacity];
+        for (int i = 0; i < getSize(); i++) {
+            newData[i] = data[(i + front) % data.length];
+        }
+        data = newData;
+        front = 0;
+        tail = size;
     }
 
     @Override
     public E dequeue() {
-        return null;
+        if (isEmpty()) {
+            throw new IllegalArgumentException("can not dequeue from a empty queue.");
+        }
+        E datum = data[front];
+        data[front] = null;
+        front = (front + 1) % data.length;
+        size--;
+        if (data.length - 1 > DEFAULT_CAPACITY) {
+            if (getSize() == data.length / 4 && data.length / 2 != 0) {
+                resize(data.length / 2);
+            }
+        }
+        return datum;
     }
 
     @Override
     public E getFront() {
-        return null;
+        return data[front];
+    }
+
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)
+                .append("data", data)
+                .append("front", front)
+                .append("tail", tail)
+                .append("size", size)
+                .toString();
     }
 }
