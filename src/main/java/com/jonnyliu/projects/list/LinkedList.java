@@ -95,6 +95,9 @@ public class LinkedList<E> {
             throw new IllegalArgumentException("index must <= size.");
         }
         Node curr = dummyHead.next;
+        if (curr == null) {
+            throw new IllegalArgumentException("can not set value into an empty linkedList");
+        }
         for (int i = 0; i < index; i++) {
             curr = curr.next;
         }
