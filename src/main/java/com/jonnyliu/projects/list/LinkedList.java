@@ -35,7 +35,7 @@ public class LinkedList<E> {
     public LinkedList(E[] array) {
         dummyHead = new Node(null);
         for (E e : array) {
-            addFirst(e);
+            addLast(e);
         }
     }
 
