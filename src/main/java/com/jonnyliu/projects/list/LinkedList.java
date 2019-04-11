@@ -6,7 +6,7 @@ package com.jonnyliu.projects.list;
  */
 public class LinkedList<E> {
 
-    class Node {
+    private class Node {
         E data;
         Node next;
 

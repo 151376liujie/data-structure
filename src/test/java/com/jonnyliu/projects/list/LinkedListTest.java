@@ -101,7 +101,7 @@ public class LinkedListTest {
         LinkedList<Integer> list = new LinkedList<>();
         assertTrue(list.isEmpty());
 
-        list.addFirst( 9);
+        list.addFirst(9);
         assertFalse(list.isEmpty());
         assertTrue(list.contains(9));
     }
@@ -111,7 +111,7 @@ public class LinkedListTest {
         LinkedList<Integer> list = new LinkedList<>();
         assertTrue(list.isEmpty());
 
-        list.addFirst( 9);
+        list.addFirst(9);
         assertFalse(list.isEmpty());
         assertTrue(list.contains(9));
 
@@ -124,7 +124,7 @@ public class LinkedListTest {
         LinkedList<Integer> list = new LinkedList<>();
         assertTrue(list.isEmpty());
 
-        list.addFirst( 9);
+        list.addFirst(9);
         assertFalse(list.isEmpty());
         assertTrue(list.contains(9));
 
@@ -137,11 +137,26 @@ public class LinkedListTest {
         LinkedList<Integer> list = new LinkedList<>();
         assertTrue(list.isEmpty());
 
-        list.addLast( 9);
+        list.addLast(9);
         assertFalse(list.isEmpty());
         assertTrue(list.contains(9));
 
         list.removeLast();
         assertTrue(list.isEmpty());
+    }
+
+    @Test
+    public void name() {
+
+        LinkedList<Integer> list = new LinkedList<>(new Integer[]{1, 2, 3});
+
+        assertFalse(list.isEmpty());
+
+        Integer[] arr = new Integer[list.getSize()];
+        for (int i = 0; i < list.getSize(); i++) {
+            arr[i] = list.get(i);
+        }
+
+        assertArrayEquals(new Integer[]{1, 2, 3}, arr);
     }
 }
