@@ -59,7 +59,7 @@ public class LoopArrayQueue<E> implements Queue<E> {
     }
 
     private void resize(int newCapacity) {
-        E[] newData = (E[]) new Object[newCapacity];
+        E[] newData = (E[]) new Object[newCapacity + 1];
         for (int i = 0; i < getSize(); i++) {
             newData[i] = data[(i + front) % data.length];
         }
@@ -77,9 +77,9 @@ public class LoopArrayQueue<E> implements Queue<E> {
         data[front] = null;
         front = (front + 1) % data.length;
         size--;
-        if (data.length - 1 > DEFAULT_CAPACITY) {
-            if (getSize() == data.length / 4 && data.length / 2 != 0) {
-                resize(data.length / 2);
+        if (getCapacity() > DEFAULT_CAPACITY) {
+            if (getSize() == getCapacity() / 4 && getCapacity() / 2 != 0) {
+                resize(getCapacity() / 2);
             }
         }
         return datum;
@@ -87,6 +87,9 @@ public class LoopArrayQueue<E> implements Queue<E> {
 
     @Override
     public E getFront() {
+        if (isEmpty()) {
+            throw new IllegalArgumentException(" queue is empty.");
+        }
         return data[front];
     }
 
