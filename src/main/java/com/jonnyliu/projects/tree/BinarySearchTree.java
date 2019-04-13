@@ -44,6 +44,15 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     /**
+     * 获取二分搜索树的根
+     *
+     * @return 二分搜索树的根
+     */
+    public Node<E> getRoot() {
+        return root;
+    }
+
+    /**
      * 向当前二分搜索树中添加元素e
      *
      * @param e 元素
@@ -59,26 +68,64 @@ public class BinarySearchTree<E extends Comparable<E>> {
         Node<E> cur = root;
         Node<E> prev = null;
         while (cur != null) {
+            if (cur.data.compareTo(e) == 0) {
+                return;
+            }
+            prev = cur;
             if (cur.data.compareTo(e) > 0) {
-                prev = cur;
                 cur = cur.left;
             } else if (cur.data.compareTo(e) < 0) {
-                prev = cur;
                 cur = cur.right;
             }
         }
         if (prev.data.compareTo(e) > 0) {
-            size++;
             prev.left = new Node<>(e);
         } else {
-            size++;
             prev.right = new Node<>(e);
         }
+        size++;
+    }
 
+    /**
+     * 该方法和 @{link add(E e)}方法功能一样,但是采用递归的方式添加元素
+     *
+     * @param e 指定元素
+     */
+    public void addRecursive(E e) {
+
+        root = add(root, e);
 
     }
 
-    private class Node<E> {
+    /**
+     * 在以指定节点为根的二分搜索树中添加元素e,并返回添加之后二分搜索树的根
+     *
+     * @param node 二分搜索树的根
+     * @param e    指定元素
+     * @return
+     */
+    private Node<E> add(Node<E> node, E e) {
+
+        if (node == null) {
+            size++;
+            return new Node<>(e);
+        }
+
+        //二分搜索树中没有两个元素相等的语义,当二分搜索树中已经有相等的元素,则默认什么都不做
+        if (node.data.compareTo(e) == 0) {
+            return node;
+        }
+
+        if (node.data.compareTo(e) > 0) {
+            node.left = add(node.left, e);
+        } else {
+            node.right = add(node.right, e);
+        }
+
+        return node;
+    }
+
+    public class Node<E> {
 
         private E data;
 
@@ -94,6 +141,18 @@ public class BinarySearchTree<E extends Comparable<E>> {
             this.data = data;
             this.left = left;
             this.right = right;
+        }
+
+        public E getData() {
+            return data;
+        }
+
+        public Node<E> getLeft() {
+            return left;
+        }
+
+        public Node<E> getRight() {
+            return right;
         }
     }
 }
