@@ -1,6 +1,5 @@
 package com.jonnyliu.projects.tree;
 
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -43,7 +42,7 @@ public class BinarySearchTreeTest {
             count++;
             assertEquals(count, tree.getSize());
         }
-        BinarySearchTree<Integer>.Node<Integer> root = tree.getRoot();
+        BinarySearchTree<Integer>.Node root = tree.getRoot();
 
         assertEquals(Integer.valueOf(3), root.getData());
         assertEquals(Integer.valueOf(2), root.getLeft().getData());
@@ -55,17 +54,118 @@ public class BinarySearchTreeTest {
 
     }
 
+
     @Test
     public void addRecursive() {
-    }
-
-    public static void main(String[] args) {
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
-        for (int i = 0; i < 5; i++) {
-            tree.add(RandomUtils.nextInt(10, 50));
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
 
+        int[] arr = new int[]{3, 2, 4, 0, 1};
+        int count = 0;
+        for (int i : arr) {
+            tree.add(i);
+            count++;
+            assertEquals(count, tree.getSize());
         }
-        System.out.println(tree);
+        /**
+         *                 3
+         *                /  \
+         *               2    4
+         *              / \
+         *             0   1
+         */
+
+        BinarySearchTree<Integer>.Node root = tree.getRoot();
+
+        assertEquals(Integer.valueOf(3), root.getData());
+        assertEquals(Integer.valueOf(2), root.getLeft().getData());
+        assertEquals(Integer.valueOf(4), root.getRight().getData());
+        assertNull(root.getRight().getLeft());
+        assertNull(root.getRight().getRight());
+        assertEquals(Integer.valueOf(0), root.getLeft().getLeft().getData());
+        assertEquals(Integer.valueOf(1), root.getLeft().getLeft().getRight().getData());
     }
 
+    @Test
+    public void contains() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        tree.add(2);
+
+        assertTrue(tree.contains(2));
+        assertFalse(tree.contains(5));
+    }
+
+    @Test
+    public void preOrder() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        tree.add(7);
+        tree.add(2);
+        tree.add(9);
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals("4,2,3,7,9", tree.preOrder());
+    }
+
+    @Test
+    public void inOrder() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        tree.add(7);
+        tree.add(2);
+        tree.add(9);
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals("2,3,4,7,9", tree.inOrder());
+    }
+
+    @Test
+    public void postOrder() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        tree.add(7);
+        tree.add(2);
+        tree.add(9);
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals("3,2,9,7,4", tree.postOrder());
+    }
 }

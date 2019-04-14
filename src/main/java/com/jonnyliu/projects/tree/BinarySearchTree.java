@@ -1,5 +1,7 @@
 package com.jonnyliu.projects.tree;
 
+import java.util.StringJoiner;
+
 /**
  * Project Name: data-structure
  * Package Name: com.jonnyliu.projects.tree
@@ -13,7 +15,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     /**
      * 二分搜索树的根节点
      */
-    private Node<E> root;
+    private Node root;
 
     /**
      * 二分搜索树中节点个数
@@ -48,7 +50,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
      *
      * @return 二分搜索树的根
      */
-    public Node<E> getRoot() {
+    public Node getRoot() {
         return root;
     }
 
@@ -60,13 +62,13 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public void add(E e) {
 
         if (root == null) {
-            root = new Node<>(e);
+            root = new Node(e);
             size++;
             return;
         }
 
-        Node<E> cur = root;
-        Node<E> prev = null;
+        Node cur = root;
+        Node prev = null;
         while (cur != null) {
             if (cur.data.compareTo(e) == 0) {
                 return;
@@ -79,9 +81,9 @@ public class BinarySearchTree<E extends Comparable<E>> {
             }
         }
         if (prev.data.compareTo(e) > 0) {
-            prev.left = new Node<>(e);
+            prev.left = new Node(e);
         } else {
-            prev.right = new Node<>(e);
+            prev.right = new Node(e);
         }
         size++;
     }
@@ -94,7 +96,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
     public void addRecursive(E e) {
 
         root = add(root, e);
-
     }
 
     /**
@@ -104,11 +105,11 @@ public class BinarySearchTree<E extends Comparable<E>> {
      * @param e    指定元素
      * @return
      */
-    private Node<E> add(Node<E> node, E e) {
+    private Node add(Node node, E e) {
 
         if (node == null) {
             size++;
-            return new Node<>(e);
+            return new Node(e);
         }
 
         //二分搜索树中没有两个元素相等的语义,当二分搜索树中已经有相等的元素,则默认什么都不做
@@ -125,19 +126,111 @@ public class BinarySearchTree<E extends Comparable<E>> {
         return node;
     }
 
-    public class Node<E> {
+    /**
+     * 在二分搜索树中查找是否有指定元素e
+     *
+     * @param e 要查找的指定元素
+     * @return true 如果找到指定元素;否则返回false
+     */
+    public boolean contains(E e) {
+
+        return contains(root, e);
+    }
+
+    private boolean contains(Node node, E e) {
+        if (node == null) {
+            return false;
+        }
+        if (node.data.compareTo(e) > 0) {
+            return contains(node.left, e);
+        } else if (node.data.compareTo(e) < 0) {
+            return contains(node.right, e);
+        }
+        return true;
+    }
+
+    /**
+     * 二分搜索树的前序遍历
+     *
+     * @return
+     */
+    public String preOrder() {
+        StringJoiner joiner = new StringJoiner(",");
+
+        preOrder(root, joiner);
+        return joiner.toString();
+    }
+
+    private void preOrder(Node root, StringJoiner joiner) {
+        if (root == null) {
+            return;
+        }
+        joiner.add(root.data.toString());
+        preOrder(root.left, joiner);
+        preOrder(root.right, joiner);
+    }
+
+    /**
+     * 中序遍历二分搜索树
+     *
+     * @return
+     */
+    public String inOrder() {
+        StringJoiner joiner = new StringJoiner(",");
+
+        inOrder(root, joiner);
+        return joiner.toString();
+    }
+
+    private void inOrder(Node root, StringJoiner joiner) {
+        if (root == null) {
+            return;
+        }
+        inOrder(root.left, joiner);
+        joiner.add(root.data.toString());
+        inOrder(root.right, joiner);
+    }
+
+    /**
+     * 后序遍历二分搜索树
+     *
+     * @return
+     */
+    public String postOrder() {
+        StringJoiner joiner = new StringJoiner(",");
+
+        postOrder(root, joiner);
+        return joiner.toString();
+    }
+
+    private void postOrder(Node root, StringJoiner joiner) {
+        if (root == null) {
+            return;
+        }
+        postOrder(root.left, joiner);
+        postOrder(root.right, joiner);
+        joiner.add(root.data.toString());
+    }
+
+    @Override
+    public String toString() {
+
+        return preOrder();
+    }
+
+    public class Node {
 
         private E data;
 
-        private Node<E> left;
+        private Node left;
 
-        private Node<E> right;
+        private Node right;
 
         public Node(E data) {
             this(data, null, null);
         }
 
-        public Node(E data, Node<E> left, Node<E> right) {
+        public Node(E data, Node left, Node right) {
             this.data = data;
             this.left = left;
             this.right = right;
@@ -147,12 +240,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
             return data;
         }
 
-        public Node<E> getLeft() {
+        public Node getLeft() {
             return left;
         }
 
-        public Node<E> getRight() {
+        public Node getRight() {
             return right;
         }
     }
+
+
 }
