@@ -1,5 +1,10 @@
 package com.jonnyliu.projects.tree;
 
+import com.jonnyliu.projects.queue.LinkedListQueue;
+import com.jonnyliu.projects.queue.Queue;
+import com.jonnyliu.projects.stack.ArrayStack;
+import com.jonnyliu.projects.stack.Stack;
+
 import java.util.StringJoiner;
 
 /**
@@ -150,6 +155,97 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     /**
+     * 删除二分搜索树的最小节点
+     * @return 删除的节点的值
+     */
+    public E removeMin() {
+        E min = min();
+        root = removeMin(root);
+        return min;
+    }
+
+    /**
+     * 删除以 node 为根的二分搜索树的最小值，并返回删除后的
+     * 二分搜索树的根
+     * @param node
+     * @return
+     */
+    private Node removeMin(Node node) {
+
+        //待删除的节点即为 node
+        if (node.left == null) {
+            //保存待删除节点的右子树
+            Node right = node.right;
+            node.right = null;
+            size --;
+            return right;
+        }
+        node.left = removeMin(node.left);
+        return node;
+    }
+    /**
+     * 删除二分搜索树的最大节点
+     * @return 删除的节点的值
+     */
+    public E removeMax() {
+        E max = max();
+        root = removeMax(root);
+        return max;
+    }
+
+    /**
+     * 删除以 node 为根的二分搜索树的最大值，并返回删除后的
+     * 二分搜索树的根
+     * @param node
+     * @return
+     */
+    private Node removeMax(Node node) {
+
+        //待删除的节点即为 node
+        if (node.right == null) {
+            //保存待删除节点的左子树
+            Node left = node.left;
+            node.left = null;
+            size --;
+            return left;
+        }
+        node.right = removeMax(node.right);
+        return node;
+    }
+
+    /**
+     * 获取二分搜索树的最小值
+     *
+     * @return
+     */
+    public E min() {
+        if (root == null) {
+            throw new IllegalArgumentException("the binary search tree is empty...");
+        }
+        Node cur = root;
+        while (cur.left != null) {
+            cur = cur.left;
+        }
+        return cur.data;
+    }
+
+    /**
+     * 获取二分搜索树的最小值
+     *
+     * @return
+     */
+    public E max() {
+        if (root == null) {
+            throw new IllegalArgumentException("the binary search tree is empty...");
+        }
+        Node cur = root;
+        while (cur.right != null) {
+            cur = cur.right;
+        }
+        return cur.data;
+    }
+
+    /**
      * 二分搜索树的前序遍历
      *
      * @return
@@ -168,6 +264,46 @@ public class BinarySearchTree<E extends Comparable<E>> {
         joiner.add(root.data.toString());
         preOrder(root.left, joiner);
         preOrder(root.right, joiner);
+    }
+
+    /**
+     * 非递归方法实现二分搜索树的前序遍历
+     *
+     * @return
+     */
+    public String preOrderNonRecursive() {
+        StringJoiner joiner = new StringJoiner(",");
+        Stack<Node> stack = new ArrayStack<>(this.size);
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+            if (node != null) {
+                joiner.add(node.data.toString());
+                stack.push(node.right);
+                stack.push(node.left);
+            }
+        }
+        return joiner.toString();
+    }
+
+    /**
+     * 二分搜索树的层次遍历
+     *
+     * @return
+     */
+    public String levelOrder() {
+        StringJoiner joiner = new StringJoiner(",");
+        Queue<Node> queue = new LinkedListQueue<>();
+        queue.enqueue(root);
+        while (!queue.isEmpty()) {
+            Node node = queue.dequeue();
+            if (node != null) {
+                joiner.add(node.data.toString());
+                queue.enqueue(node.left);
+                queue.enqueue(node.right);
+            }
+        }
+        return joiner.toString();
     }
 
     /**
@@ -214,7 +350,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     @Override
     public String toString() {
-
         return preOrder();
     }
 
@@ -248,6 +383,4 @@ public class BinarySearchTree<E extends Comparable<E>> {
             return right;
         }
     }
-
-
 }
