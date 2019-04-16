@@ -127,7 +127,6 @@ public class BinarySearchTree<E extends Comparable<E>> {
         } else {
             node.right = add(node.right, e);
         }
-
         return node;
     }
 
@@ -156,6 +155,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     /**
      * 删除二分搜索树的最小节点
+     *
      * @return 删除的节点的值
      */
     public E removeMin() {
@@ -167,6 +167,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     /**
      * 删除以 node 为根的二分搜索树的最小值，并返回删除后的
      * 二分搜索树的根
+     *
      * @param node
      * @return
      */
@@ -177,14 +178,36 @@ public class BinarySearchTree<E extends Comparable<E>> {
             //保存待删除节点的右子树
             Node right = node.right;
             node.right = null;
-            size --;
+            size--;
             return right;
         }
         node.left = removeMin(node.left);
         return node;
     }
+
+    public E removeMinNonRecusive() {
+        if (root == null) {
+            throw new IllegalArgumentException("can not remove from an empty tree!");
+        }
+        Node cur = root;
+        Node parent = root;
+        while (cur.left != null) {
+            parent = cur;
+            cur = cur.left;
+        }
+
+        Node right = cur.right;
+        parent.left = right;
+        cur.right = null;
+
+        size--;
+
+        return cur.data;
+    }
+
     /**
      * 删除二分搜索树的最大节点
+     *
      * @return 删除的节点的值
      */
     public E removeMax() {
@@ -196,6 +219,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
     /**
      * 删除以 node 为根的二分搜索树的最大值，并返回删除后的
      * 二分搜索树的根
+     *
      * @param node
      * @return
      */
@@ -206,7 +230,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
             //保存待删除节点的左子树
             Node left = node.left;
             node.left = null;
-            size --;
+            size--;
             return left;
         }
         node.right = removeMax(node.right);
@@ -273,7 +297,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
      */
     public String preOrderNonRecursive() {
         StringJoiner joiner = new StringJoiner(",");
-        Stack<Node> stack = new ArrayStack<>(this.size);
+        Stack<Node> stack = new ArrayStack<>(size);
         stack.push(root);
         while (!stack.isEmpty()) {
             Node node = stack.pop();

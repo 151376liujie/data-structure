@@ -273,7 +273,7 @@ public class BinarySearchTreeTest {
     }
 
     @Test
-    public void removeMin(){
+    public void removeMin() {
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
         assertTrue(tree.isEmpty());
         assertNull(tree.getRoot());
@@ -331,4 +331,49 @@ public class BinarySearchTreeTest {
         System.out.println(tree);
     }
 
+    @Test
+    public void getRoot() {
+
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        assertEquals(4, tree.getRoot().getData().intValue());
+        tree.add(7);
+        assertEquals(4, tree.getRoot().getData().intValue());
+        tree.add(2);
+        assertEquals(4, tree.getRoot().getData().intValue());
+    }
+
+    @Test
+    public void removeMinNonRecusive() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.add(4);
+        assertEquals(4, tree.removeMinNonRecusive().intValue());
+        tree.add(7);
+        tree.add(2);
+        tree.add(9);
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals(2, tree.removeMinNonRecusive().intValue());
+        assertEquals(3, tree.removeMinNonRecusive().intValue());
+        assertEquals(4, tree.removeMinNonRecusive().intValue());
+        assertEquals(7, tree.removeMinNonRecusive().intValue());
+        assertEquals(9, tree.removeMinNonRecusive().intValue());
+
+        System.out.println(tree);
+
+    }
 }
