@@ -1,6 +1,10 @@
 package com.jonnyliu.projects.tree;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -347,13 +351,12 @@ public class BinarySearchTreeTest {
     }
 
     @Test
-    public void removeMinNonRecusive() {
+    public void removeMinNonRecursive() {
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
         assertTrue(tree.isEmpty());
         assertNull(tree.getRoot());
 
         tree.add(4);
-        assertEquals(4, tree.removeMinNonRecusive().intValue());
         tree.add(7);
         tree.add(2);
         tree.add(9);
@@ -367,13 +370,69 @@ public class BinarySearchTreeTest {
          *      3       9
          */
 
-        assertEquals(2, tree.removeMinNonRecusive().intValue());
-        assertEquals(3, tree.removeMinNonRecusive().intValue());
-        assertEquals(4, tree.removeMinNonRecusive().intValue());
-        assertEquals(7, tree.removeMinNonRecusive().intValue());
-        assertEquals(9, tree.removeMinNonRecusive().intValue());
+        assertEquals(2, tree.removeMinNonRecursive().intValue());
+        assertEquals(3, tree.removeMinNonRecursive().intValue());
+        assertEquals(4, tree.removeMinNonRecursive().intValue());
+        assertEquals(7, tree.removeMinNonRecursive().intValue());
+        assertEquals(9, tree.removeMinNonRecursive().intValue());
 
-        System.out.println(tree);
+        assertNull("binary search tree remove min node test done.", tree.getRoot());
 
+    }
+
+
+    @Test
+    public void removeMinNonRecursive2() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        for (int k = 0; k < 100; k++) {
+            for (int i = 0; i < 10; i++) {
+                tree.add(RandomUtils.nextInt(0, 10));
+            }
+
+            int size = tree.getSize();
+            List<Integer> list = new ArrayList<>(size);
+
+            for (int i = 0; i < size; i++) {
+                list.add(tree.removeMinNonRecursive());
+            }
+            //list中的元素应该是从小到大排列
+            for (int i = 1; i < list.size(); i++) {
+                if (list.get(i - 1).compareTo(list.get(i)) > 0) {
+                    throw new RuntimeException("error");
+                }
+            }
+            assertNull(tree.getRoot());
+        }
+    }
+
+    /**
+     * 测试二分搜索树中只有右子树的情况
+     */
+    @Test
+    public void removeMinNonRecursive3() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        for (int i = 0; i < 10; i++) {
+            tree.add(i);
+        }
+
+        int size = tree.getSize();
+        List<Integer> list = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            list.add(tree.removeMinNonRecursive());
+        }
+        //list中的元素应该是从小到大排列
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i - 1).compareTo(list.get(i)) > 0) {
+                throw new RuntimeException("error");
+            }
+        }
+        assertNull(tree.getRoot());
     }
 }

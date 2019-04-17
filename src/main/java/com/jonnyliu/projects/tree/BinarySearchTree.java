@@ -185,10 +185,23 @@ public class BinarySearchTree<E extends Comparable<E>> {
         return node;
     }
 
-    public E removeMinNonRecusive() {
+    /**
+     * 删除二分搜索树的最小节点的非递归实现
+     * @return 删除后的节点
+     */
+    public E removeMinNonRecursive() {
         if (root == null) {
             throw new IllegalArgumentException("can not remove from an empty tree!");
         }
+
+        // 说明 root 就是要被删除的节点
+        if (root.left == null){
+            E data = root.data;
+            root = root.right;
+            size--;
+            return data;
+        }
+
         Node cur = root;
         Node parent = root;
         while (cur.left != null) {
