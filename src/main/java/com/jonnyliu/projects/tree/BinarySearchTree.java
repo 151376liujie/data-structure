@@ -209,8 +209,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
             cur = cur.left;
         }
 
-        Node right = cur.right;
-        parent.left = right;
+        parent.left = cur.right;
         cur.right = null;
 
         size--;
@@ -248,6 +247,39 @@ public class BinarySearchTree<E extends Comparable<E>> {
         }
         node.right = removeMax(node.right);
         return node;
+    }
+
+    /**
+     * 删除二分搜索树的最大节点的非递归实现
+     * @return
+     */
+    public E removeMaxNonRecursive(){
+
+        if (root == null) {
+            throw new IllegalArgumentException("can not remove from an empty tree!");
+        }
+
+        // 说明 root 就是要被删除的节点
+        if (root.right == null){
+            E data = root.data;
+            root = root.left;
+            size--;
+            return data;
+        }
+
+        Node cur = root;
+        Node parent = root;
+        while (cur.right != null) {
+            parent = cur;
+            cur = cur.right;
+        }
+
+        parent.right = cur.left;
+        cur.left = null;
+
+        size--;
+
+        return cur.data;
     }
 
     /**

@@ -362,6 +362,8 @@ public class BinarySearchTreeTest {
         tree.add(9);
         tree.add(3);
 
+        assertEquals(5, tree.getSize());
+
         /**
          *        4
          *      /   \
@@ -376,7 +378,8 @@ public class BinarySearchTreeTest {
         assertEquals(7, tree.removeMinNonRecursive().intValue());
         assertEquals(9, tree.removeMinNonRecursive().intValue());
 
-        assertNull("binary search tree remove min node test done.", tree.getRoot());
+        assertNull(tree.getRoot());
+        assertTrue(tree.isEmpty());
 
     }
 
@@ -398,6 +401,7 @@ public class BinarySearchTreeTest {
             for (int i = 0; i < size; i++) {
                 list.add(tree.removeMinNonRecursive());
             }
+            assertTrue(tree.isEmpty());
             //list中的元素应该是从小到大排列
             for (int i = 1; i < list.size(); i++) {
                 if (list.get(i - 1).compareTo(list.get(i)) > 0) {
@@ -427,9 +431,67 @@ public class BinarySearchTreeTest {
         for (int i = 0; i < size; i++) {
             list.add(tree.removeMinNonRecursive());
         }
+        assertTrue(tree.isEmpty());
         //list中的元素应该是从小到大排列
         for (int i = 1; i < list.size(); i++) {
             if (list.get(i - 1).compareTo(list.get(i)) > 0) {
+                throw new RuntimeException("error");
+            }
+        }
+        assertNull(tree.getRoot());
+    }
+
+    @Test
+    public void removeMaxNonRecursive() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        for (int k = 0; k < 100; k++) {
+            for (int i = 0; i < 10; i++) {
+                tree.add(RandomUtils.nextInt(0, 10));
+            }
+
+            int size = tree.getSize();
+            List<Integer> list = new ArrayList<>(size);
+
+            for (int i = 0; i < size; i++) {
+                list.add(tree.removeMaxNonRecursive());
+            }
+            assertTrue(tree.isEmpty());
+            //list中的元素应该是从大到小排列
+            for (int i = 1; i < list.size(); i++) {
+                if (list.get(i - 1).compareTo(list.get(i)) < 0) {
+                    throw new RuntimeException("error");
+                }
+            }
+            assertNull(tree.getRoot());
+        }
+    }
+
+    /**
+     * 测试二分搜索树中只有右子树的情况
+     */
+    @Test
+    public void removeMaxNonRecursive2() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        for (int i = 10; i > 0; i--) {
+            tree.add(i);
+        }
+
+        int size = tree.getSize();
+        List<Integer> list = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            list.add(tree.removeMaxNonRecursive());
+        }
+        assertTrue(tree.isEmpty());
+        //list中的元素应该是从小到大排列
+        for (int i = 1; i < list.size(); i++) {
+            if (list.get(i - 1).compareTo(list.get(i)) < 0) {
                 throw new RuntimeException("error");
             }
         }
