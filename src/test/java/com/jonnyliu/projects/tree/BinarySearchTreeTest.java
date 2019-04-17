@@ -247,6 +247,35 @@ public class BinarySearchTreeTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void minNonRecursive() {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.min();
+
+        tree.add(4);
+        assertEquals(4, tree.minNonRecursive().intValue());
+        tree.add(7);
+        assertEquals(4, tree.minNonRecursive().intValue());
+        tree.add(2);
+        assertEquals(2, tree.minNonRecursive().intValue());
+        tree.add(9);
+        assertEquals(2, tree.minNonRecursive().intValue());
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals(2, tree.minNonRecursive().intValue());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void max() {
 
         BinarySearchTree<Integer> tree = new BinarySearchTree<>();
@@ -274,6 +303,36 @@ public class BinarySearchTreeTest {
          */
 
         assertEquals(9, tree.max().intValue());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void maxNonRecursive() {
+
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        assertTrue(tree.isEmpty());
+        assertNull(tree.getRoot());
+
+        tree.max();
+
+        tree.add(4);
+        assertEquals(4, tree.maxNonRecursive().intValue());
+        tree.add(7);
+        assertEquals(7, tree.maxNonRecursive().intValue());
+        tree.add(2);
+        assertEquals(7, tree.maxNonRecursive().intValue());
+        tree.add(9);
+        assertEquals(9, tree.maxNonRecursive().intValue());
+        tree.add(3);
+
+        /**
+         *        4
+         *      /   \
+         *    2      7
+         *     \       \
+         *      3       9
+         */
+
+        assertEquals(9, tree.maxNonRecursive().intValue());
     }
 
     @Test

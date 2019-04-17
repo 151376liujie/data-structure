@@ -187,6 +187,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     /**
      * 删除二分搜索树的最小节点的非递归实现
+     *
      * @return 删除后的节点
      */
     public E removeMinNonRecursive() {
@@ -195,7 +196,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
         }
 
         // 说明 root 就是要被删除的节点
-        if (root.left == null){
+        if (root.left == null) {
             E data = root.data;
             root = root.right;
             size--;
@@ -251,16 +252,17 @@ public class BinarySearchTree<E extends Comparable<E>> {
 
     /**
      * 删除二分搜索树的最大节点的非递归实现
+     *
      * @return
      */
-    public E removeMaxNonRecursive(){
+    public E removeMaxNonRecursive() {
 
         if (root == null) {
             throw new IllegalArgumentException("can not remove from an empty tree!");
         }
 
         // 说明 root 就是要被删除的节点
-        if (root.right == null){
+        if (root.right == null) {
             E data = root.data;
             root = root.left;
             size--;
@@ -283,11 +285,78 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     /**
-     * 获取二分搜索树的最小值
+     * 删除二分搜索树中的指定节点(非递归实现)
      *
-     * @return
+     * @param e 待删除的节点
      */
-    public E min() {
+    public void removeNonRecursive(E e) {
+
+        if (root == null) {
+            throw new IllegalArgumentException("can not remove node from an empty tree!");
+        }
+        Node cur = root;
+        Node parent = root;
+        while (cur != null && cur.data.compareTo(e) != 0) {
+            parent = cur;
+            if (cur.data.compareTo(e) > 0) {
+                cur = cur.left;
+            } else if (cur.data.compareTo(e) < 0) {
+                cur = cur.right;
+            }
+        }
+
+        if (cur == null) {
+            throw new IllegalArgumentException(" node does not exists in tree!");
+        }
+
+        //cur即为待删除的节点
+        //找到待删除节点的右节点的最小值，该值即为待删除节点的后继几点
+        Node node = min(cur.right);
+
+        if (parent.data.compareTo(node.data) > 0) {
+            parent.left = node;
+        } else {
+            parent.right = node;
+        }
+        Node min = removeMin(cur.right);
+        node.left = cur.left;
+        node.right = cur.right;
+
+
+    }
+
+    public void remove(E e) {
+        if (root == null) {
+            throw new IllegalArgumentException("the tree is empty");
+        }
+        remove(root, e);
+    }
+
+    public void remove(Node node, E e) {
+        if (node.data.compareTo(e) == 0) {
+
+        }
+    }
+
+    public static void main(String[] args) {
+        BinarySearchTree<Integer> tree = new BinarySearchTree<>();
+        tree.add(5);
+        tree.add(2);
+        tree.add(8);
+        tree.add(1);
+        tree.add(3);
+        tree.add(6);
+        tree.add(10);
+        tree.remove(2);
+    }
+
+
+    /**
+     * 获取二分搜索树的最小值（非递归实现）
+     *
+     * @return 二分搜索树的最小值
+     */
+    public E minNonRecursive() {
         if (root == null) {
             throw new IllegalArgumentException("the binary search tree is empty...");
         }
@@ -299,11 +368,37 @@ public class BinarySearchTree<E extends Comparable<E>> {
     }
 
     /**
-     * 获取二分搜索树的最小值
+     * 获取二分搜索树的最小值（递归实现）
      *
-     * @return
+     * @return 二分搜索树的最小值
      */
-    public E max() {
+    public E min() {
+        if (root == null) {
+            throw new IllegalArgumentException("the binary search tree is empty...");
+        }
+        return min(root).data;
+    }
+
+    /**
+     * 获取指定根的二分搜索树的最小节点
+     *
+     * @param node 二分搜索树的根
+     * @return 最小节点
+     */
+    private Node min(Node node) {
+
+        if (node.left == null) {
+            return node;
+        }
+        return min(node.left);
+    }
+
+    /**
+     * 获取二分搜索树的最大值（非递归实现）
+     *
+     * @return 二分搜索树的最大值
+     */
+    public E maxNonRecursive() {
         if (root == null) {
             throw new IllegalArgumentException("the binary search tree is empty...");
         }
@@ -312,6 +407,32 @@ public class BinarySearchTree<E extends Comparable<E>> {
             cur = cur.right;
         }
         return cur.data;
+    }
+
+    /**
+     * 获取二分搜索树的最大值（递归实现）
+     *
+     * @return
+     */
+    public E max() {
+        if (root == null) {
+            throw new IllegalArgumentException("the binary search tree is empty...");
+        }
+        return max(root).data;
+    }
+
+    /**
+     * 获取指定根的二分搜索树的最大节点
+     *
+     * @param node 二分搜索树的根
+     * @return 最大节点
+     */
+    private Node max(Node node) {
+
+        if (node.right == null) {
+            return node;
+        }
+        return max(node.right);
     }
 
     /**
