@@ -237,6 +237,7 @@ public class Array<E> {
             data[j - 1] = data[j];
         }
         size--;
+        //这个操作其实也可以不做，因为用户永远不会看到index == size的位置的元素，只不过执行这个可以帮助GC
         data[size] = null;
 
         //缩容
