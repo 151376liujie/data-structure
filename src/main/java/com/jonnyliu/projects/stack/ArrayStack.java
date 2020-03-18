@@ -69,4 +69,20 @@ public class ArrayStack<E> implements Stack<E> {
     public E peek() {
         return array.get(getSize() - 1);
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("stack: ")
+                .append("[");
+        for (int i = 0; i < array.getSize(); i++) {
+            builder.append(array.get(i));
+            if (i != array.getSize() - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("] top");
+        return builder.toString();
+    }
 }

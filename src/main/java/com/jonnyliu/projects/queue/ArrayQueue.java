@@ -2,6 +2,8 @@ package com.jonnyliu.projects.queue;
 
 import com.jonnyliu.projects.array.Array;
 
+import java.util.stream.IntStream;
+
 /**
  * Project Name: data-structure
  * Package Name: com.jonnyliu.projects.queue
@@ -46,4 +48,30 @@ public class ArrayQueue<E> implements Queue<E> {
     public E getFront() {
         return array.getFirst();
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("queue: ")
+                .append("front [");
+        for (int i = 0; i < array.getSize(); i++) {
+            builder.append(array.get(i));
+            if (i != array.getSize() - 1) {
+                builder.append(", ");
+            }
+        }
+        builder.append("] tail");
+        return builder.toString();
+    }
+
+    public static void main(String[] args) {
+        ArrayQueue<Integer> queue = new ArrayQueue<>();
+        IntStream.range(0, 9).forEach(queue::enqueue);
+
+        System.out.println(queue);
+        System.out.println(queue.dequeue());
+        System.out.println(queue);
+
+    }
+
 }

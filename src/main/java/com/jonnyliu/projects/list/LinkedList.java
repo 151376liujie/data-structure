@@ -10,6 +10,10 @@ public class LinkedList<E> {
         E data;
         Node next;
 
+        public Node() {
+            this(null);
+        }
+
         public Node(E data) {
             this(data, null);
         }
@@ -17,6 +21,11 @@ public class LinkedList<E> {
         public Node(E data, Node next) {
             this.data = data;
             this.next = next;
+        }
+
+        @Override
+        public String toString() {
+            return data.toString();
         }
     }
 
@@ -27,13 +36,13 @@ public class LinkedList<E> {
     private int size;
 
     public LinkedList() {
-        dummyHead = new Node(null);
+        dummyHead = new Node();
         size = 0;
     }
 
 
     public LinkedList(E[] array) {
-        dummyHead = new Node(null);
+        dummyHead = new Node();
         for (E e : array) {
             addLast(e);
         }
@@ -116,6 +125,15 @@ public class LinkedList<E> {
     }
 
     public E remove(int index) {
+
+        if (size == 0) {
+            throw new IllegalArgumentException("can not remove from an empty linked list");
+        }
+
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException("index illegal. must >= 0 and <= size - 1");
+        }
+
         Node prev = dummyHead;
         for (int i = 0; i < index; i++) {
             prev = prev.next;
@@ -141,7 +159,7 @@ public class LinkedList<E> {
         StringBuilder builder = new StringBuilder();
         Node curr = dummyHead.next;
         while (curr != null) {
-            builder.append(curr.data).append(" -> ");
+            builder.append(curr.data).append("->");
             curr = curr.next;
         }
         builder.append("null");
@@ -154,7 +172,7 @@ public class LinkedList<E> {
         list.addFirst(1);
         System.out.println(list);
 
-        list = new LinkedList(new Integer[]{1, 2, 3});
+        list = new LinkedList<>(new Integer[]{1, 2, 3});
         System.out.println(list);
         list.add(2, 4);
         System.out.println(list);
@@ -165,7 +183,20 @@ public class LinkedList<E> {
         System.out.println(list.contains(4));
         System.out.println(list.contains(14));
 
-        System.out.println(list.remove(1));
+        System.out.println(list.remove(3));
+        System.out.println(list);
+
+        list.addLast(9);
+        System.out.println(list);
+        list.add(list.getSize(), 89);
+        System.out.println(list);
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println(list.removeLast());
+        System.out.println(list);
+        System.out.println(list.remove(0));
         System.out.println(list);
     }
 }

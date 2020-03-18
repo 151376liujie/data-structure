@@ -49,5 +49,6 @@ public class ArrayStackTest {
         stack.push(0);
         stack.push(1);
         Assert.assertEquals(1, stack.peek().intValue());
+        System.out.println(stack);
     }
 }
