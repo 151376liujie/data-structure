@@ -29,8 +29,9 @@ public class Array<E> {
         this(DEFAULT_CAPACITY);
     }
 
-    public Array(E[] data) {
-        for (E datum : data) {
+    public Array(E[] arr) {
+        data = (E[]) new Object[arr.length];
+        for (E datum : arr) {
             addLast(datum);
         }
     }
@@ -142,6 +143,17 @@ public class Array<E> {
             throw new IllegalArgumentException("index must be >= 0 and < size");
         }
         return data[index];
+    }
+
+    public void swap(int i, int j) {
+
+        if (i < 0 || i >= size || j < 0 || j >= size) {
+            throw new IllegalArgumentException("index is illegal.");
+        }
+
+        E tmp = data[i];
+        data[i] = data[j];
+        data[j] = tmp;
     }
 
     /**

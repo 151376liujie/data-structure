@@ -245,4 +245,17 @@ public class ArrayTest {
         Assert.assertEquals(10, array.getCapacity());
         Assert.assertEquals(0, array.getSize());
     }
+
+    @Test
+    public void testConstruct() {
+
+        Integer[] arr = {1, 2, 3, 54, 6, 7, 8};
+        array = new Array<>(arr);
+
+        System.out.println(array.getSize());
+        System.out.println(array.toString());
+        array.add(0, 45);
+        System.out.println(array.getSize());
+        System.out.println(array.toString());
+    }
 }
