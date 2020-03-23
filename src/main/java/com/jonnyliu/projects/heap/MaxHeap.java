@@ -112,7 +112,7 @@ public class MaxHeap<E extends Comparable<E>> {
      */
     public void heapify(E[] arr) {
         data = new Array<>(arr);
-        //最后一个非叶子节点
+        //从最后一个非叶子节点开始，一直到索引为0的位置，挨个进行下层操作。
         int index = parent(arr.length - 1);
         for (int i = index; i >= 0; i--) {
             shiftDown(i);
