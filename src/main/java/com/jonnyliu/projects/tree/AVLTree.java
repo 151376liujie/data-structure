@@ -210,8 +210,39 @@ public class AVLTree<K extends Comparable<K>, V> {
         if (balanceFactor > 1) {
             System.out.println("unbalanced : " + balanceFactor);
         }
+        //平衡状态被打破，且新加节点在左子树中添加
+        if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0) {
+            return rightRotate(node);
+        }
 
         return node;
+    }
+
+    /**
+     * 对节点y进行右旋转操作，并返回旋转后新的新节点x
+     * y                                       x
+     * /  \                                    /  \
+     * x    T4           向右旋转(y)            z     y
+     * / \          ------------------->      / \   / \
+     * z   T3                                T1  T2 T3  T4
+     * / \
+     * T1  T2
+     *
+     * @param y
+     * @return
+     */
+    private TreeNode rightRotate(TreeNode y) {
+
+        TreeNode x = y.left;
+        TreeNode T3 = x.right;
+
+        x.right = y;
+        y.left = T3;
+
+        //更新节点的height值,只需要更新x,y节点的值。而且先更新y的值，再更新x的值
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+        return x;
     }
 
     /**
