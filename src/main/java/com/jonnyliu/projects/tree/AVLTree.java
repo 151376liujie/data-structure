@@ -1,8 +1,15 @@
 package com.jonnyliu.projects.tree;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 /**
  * AVL平衡🌲
@@ -13,6 +20,21 @@ public class AVLTree<K extends Comparable<K>, V> {
 
     private TreeNode root;
     private int size;
+    private int count = 0;
+
+    public static void main(String[] args) throws URISyntaxException, IOException {
+        AVLTree<String, String> tree = new AVLTree<>();
+        URL url = tree.getClass().getClassLoader().getResource("Pride_and_Prejudice.txt");
+        assert url != null;
+        List<String> lines = Files.readAllLines(Paths.get(url.toURI()));
+        List<String> content = lines.stream().flatMap(line -> Arrays.stream(line.split("\\s+"))).collect(Collectors.toList());
+        System.out.println(content.size());
+
+
+        content.forEach(word -> tree.add(word, word));
+        System.out.println("tree is balanced: " + tree.isBalanced());
+        System.out.println("tree is BST: " + tree.isBST());
+    }
 
     public boolean isEmpty() {
         return size == 0;
@@ -20,26 +42,6 @@ public class AVLTree<K extends Comparable<K>, V> {
 
     public int getSize() {
         return size;
-    }
-
-    private int getHeight(TreeNode node) {
-        if (node == null) {
-            return 0;
-        }
-        return node.height;
-    }
-
-    /**
-     * 计算指定节点的平衡因子
-     *
-     * @param node
-     * @return
-     */
-    private int getBalanceFactor(TreeNode node) {
-        if (node == null) {
-            return 0;
-        }
-        return Math.abs(getHeight(node.left) - getHeight(node.right));
     }
 
     public void remove(K key) {
@@ -74,7 +76,7 @@ public class AVLTree<K extends Comparable<K>, V> {
             if (node.left != null && node.right != null) {
                 //比node节点大的最小值
                 TreeNode successor = min(node.right);
-                TreeNode newRoot = removeMin(node.right);
+                TreeNode newRoot = remove(node.right, successor.key);
                 successor.left = node.left;
                 successor.right = newRoot;
                 node.left = node.right = null;
@@ -82,65 +84,6 @@ public class AVLTree<K extends Comparable<K>, V> {
             }
         }
         return node;
-    }
-
-    public V removeMax() {
-        V e = max();
-        root = removeMax(root);
-        return e;
-    }
-
-    private TreeNode removeMax(TreeNode node) {
-        if (node == null) {
-            return null;
-        }
-
-        if (node.right == null) {
-            TreeNode left = node.left;
-            node.left = null;
-            size--;
-            return left;
-        }
-
-        node.right = removeMax(node.right);
-        return node;
-    }
-
-    public V removeMin() {
-        V e = min();
-        root = removeMin(root);
-        return e;
-    }
-
-    private TreeNode removeMin(TreeNode node) {
-
-        if (node == null) {
-            return null;
-        }
-
-        if (node.left == null) {
-            TreeNode right = node.right;
-            node.right = null;
-            size--;
-            return right;
-        }
-
-        node.left = removeMin(node.left);
-        return node;
-    }
-
-    public V max() {
-        if (root == null) {
-            throw new IllegalArgumentException("tree is empty。");
-        }
-        return max(root).value;
-    }
-
-    private TreeNode max(TreeNode node) {
-        if (node.right == null) {
-            return node;
-        }
-        return max(node.right);
     }
 
     public V min() {
@@ -182,7 +125,8 @@ public class AVLTree<K extends Comparable<K>, V> {
      * 在以node为根的二分搜索树中插入data，并返回插入后的二分搜索树的根
      *
      * @param node
-     * @param data
+     * @param key
+     * @param value
      * @return
      */
     private TreeNode add(TreeNode node, K key, V value) {
@@ -206,27 +150,68 @@ public class AVLTree<K extends Comparable<K>, V> {
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
         //计算平衡因子
         int balanceFactor = getBalanceFactor(node);
-        //平衡状态被打破，
-        if (balanceFactor > 1) {
-            System.out.println("unbalanced : " + balanceFactor);
-        }
-        //平衡状态被打破，且新加节点在左子树中添加
+
+        //平衡状态被打破，且新加节点在左子树的左边中添加（LL）
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0) {
             return rightRotate(node);
+        }
+        //平衡状态被打破，且新加节点在左子树的左边中添加（LR）
+        if (balanceFactor > 1 && getBalanceFactor(node.left) < 0) {
+            node.left = leftRotate(node.left);
+            return rightRotate(node);
+        }
+
+        //平衡状态被打破，且新加节点在右子树的右边中添加（RR）
+        if (balanceFactor < -1 && getBalanceFactor(node.right) < 0) {
+            return leftRotate(node);
+        }
+
+        //平衡状态被打破，且新加节点在右子树的左边中添加（RL）
+        if (balanceFactor < -1 && getBalanceFactor(node.right) > 0) {
+            node.right = rightRotate(node.right);
+            return leftRotate(node);
         }
 
         return node;
     }
 
     /**
+     * 对节点y进行左旋转操作，并返回旋转后新的新节点x
+     * <pre>
+     *   y                                        x
+     *  /  \                                    /  \
+     * T4   x            向左旋转(y)            y    z
+     *     / \     ------------------->      / \   / \
+     *    T3  z                            T4  T3 T1  T2
+     *       / \
+     *      T1  T2
+     * </pre>
+     *
+     * @param y
+     * @return
+     */
+    private TreeNode leftRotate(TreeNode y) {
+        TreeNode x = y.right;
+        TreeNode T3 = x.left;
+        x.left = y;
+        y.right = T3;
+        //更新节点的height值,只需要更新x,y节点的值。而且先更新y的值，再更新x的值
+        y.height = Math.max(getHeight(y.left), getHeight(y.right)) + 1;
+        x.height = Math.max(getHeight(x.left), getHeight(x.right)) + 1;
+        return x;
+    }
+
+    /**
      * 对节点y进行右旋转操作，并返回旋转后新的新节点x
-     * y                                       x
-     * /  \                                    /  \
-     * x    T4           向右旋转(y)            z     y
-     * / \          ------------------->      / \   / \
-     * z   T3                                T1  T2 T3  T4
-     * / \
+     * <pre>
+     *        y                                       x
+     *      /  \                                    /  \
+     *     x    T4           向右旋转(y)            z     y
+     *    / \          ------------------->      / \   / \
+     *   z   T3                                T1  T2 T3  T4
+     *  / \
      * T1  T2
+     * </pre>
      *
      * @param y
      * @return
@@ -251,7 +236,7 @@ public class AVLTree<K extends Comparable<K>, V> {
      *
      * @return
      */
-    public boolean isBST() {
+    boolean isBST() {
         List<K> keys = inOrder();
         for (int i = 0; i < keys.size() - 1; i++) {
             if (keys.get(i).compareTo(keys.get(i + 1)) > 0) {
@@ -261,7 +246,7 @@ public class AVLTree<K extends Comparable<K>, V> {
         return true;
     }
 
-    public boolean isBalanced() {
+    boolean isBalanced() {
         if (root == null) {
             return true;
         }
@@ -282,9 +267,34 @@ public class AVLTree<K extends Comparable<K>, V> {
         return isBalanced(node.left) && isBalanced(node.right);
     }
 
+    private int getHeight(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return node.height;
+    }
+
+    /**
+     * 计算指定节点的平衡因子
+     *
+     * @param node
+     * @return
+     */
+    private int getBalanceFactor(TreeNode node) {
+        if (node == null) {
+            return 0;
+        }
+        return getHeight(node.left) - getHeight(node.right);
+    }
+
     private List<K> inOrder() {
+
         ArrayList<K> keys = new ArrayList<>();
-        inOrder(root, keys);
+        try {
+            inOrder(root, keys);
+        } catch (Exception e) {
+            System.out.println("==========" + count);
+        }
         return keys;
     }
 
@@ -292,6 +302,7 @@ public class AVLTree<K extends Comparable<K>, V> {
         if (node == null) {
             return;
         }
+        count++;
         inOrder(root.left, keys);
         keys.add(node.key);
         inOrder(root.right, keys);
@@ -313,7 +324,7 @@ public class AVLTree<K extends Comparable<K>, V> {
         //该节点的高度
         int height;
 
-        public TreeNode(K key, V value) {
+        TreeNode(K key, V value) {
             this.key = key;
             this.value = value;
             height = 1;
