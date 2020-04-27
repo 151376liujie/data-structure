@@ -1,15 +1,9 @@
 package com.jonnyliu.projects.tree;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
 
 /**
  * AVL平衡🌲
@@ -20,21 +14,6 @@ public class AVLTree<K extends Comparable<K>, V> {
 
     private TreeNode root;
     private int size;
-    private int count = 0;
-
-    public static void main(String[] args) throws URISyntaxException, IOException {
-        AVLTree<String, String> tree = new AVLTree<>();
-        URL url = tree.getClass().getClassLoader().getResource("Pride_and_Prejudice.txt");
-        assert url != null;
-        List<String> lines = Files.readAllLines(Paths.get(url.toURI()));
-        List<String> content = lines.stream().flatMap(line -> Arrays.stream(line.split("\\s+"))).collect(Collectors.toList());
-        System.out.println(content.size());
-
-
-        content.forEach(word -> tree.add(word, word));
-        System.out.println("tree is balanced: " + tree.isBalanced());
-        System.out.println("tree is BST: " + tree.isBST());
-    }
 
     public boolean isEmpty() {
         return size == 0;
@@ -124,10 +103,10 @@ public class AVLTree<K extends Comparable<K>, V> {
     /**
      * 在以node为根的二分搜索树中插入data，并返回插入后的二分搜索树的根
      *
-     * @param node
-     * @param key
-     * @param value
-     * @return
+     * @param node  根节点
+     * @param key   key
+     * @param value value
+     * @return 插入节点后的根节点
      */
     private TreeNode add(TreeNode node, K key, V value) {
         //在一棵NULL树中插入元素data，则返回以data代表的根
@@ -146,10 +125,25 @@ public class AVLTree<K extends Comparable<K>, V> {
             node.right = add(node.right, key, value);
         }
 
+        return maintainTreeNodeBalance(node);
+    }
+
+    /**
+     * 插入节点后维护节点的平衡性
+     *
+     * @param node 节点
+     * @return
+     */
+    private TreeNode maintainTreeNodeBalance(TreeNode node) {
+
         //因为不管插入了左子树还是右子树，插入后node节点本身的高度值可能会发生变化，所以需要重新计算node当前节点的高度
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
         //计算平衡因子
         int balanceFactor = getBalanceFactor(node);
+        //不需要维护平衡
+        if (Math.abs(balanceFactor) <= 1) {
+            return node;
+        }
 
         //平衡状态被打破，且新加节点在左子树的左边中添加（LL）
         if (balanceFactor > 1 && getBalanceFactor(node.left) >= 0) {
@@ -171,7 +165,6 @@ public class AVLTree<K extends Comparable<K>, V> {
             node.right = rightRotate(node.right);
             return leftRotate(node);
         }
-
         return node;
     }
 
@@ -288,21 +281,32 @@ public class AVLTree<K extends Comparable<K>, V> {
     }
 
     private List<K> inOrder() {
-
-        ArrayList<K> keys = new ArrayList<>();
-        try {
-            inOrder(root, keys);
-        } catch (Exception e) {
-            System.out.println("==========" + count);
+        //非递归实现
+        List<K> res = new ArrayList<>();
+        LinkedList<TreeNode> stack = new LinkedList<>();
+        TreeNode cur = root;
+        while (cur != null || !stack.isEmpty()) {
+            while (cur != null) {
+                stack.push(cur);
+                cur = cur.left;
+            }
+            cur = stack.pop();
+            res.add(cur.key);
+            cur = cur.right;
         }
-        return keys;
+        return res;
     }
 
+    /**
+     * 中序遍历，递归实现
+     *
+     * @param node
+     * @param keys
+     */
     private void inOrder(TreeNode node, List<K> keys) {
         if (node == null) {
             return;
         }
-        count++;
         inOrder(root.left, keys);
         keys.add(node.key);
         inOrder(root.right, keys);
