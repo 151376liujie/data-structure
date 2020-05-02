@@ -1,10 +1,11 @@
 package com.jonnyliu.projects.tree;
 
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.HashSet;
 import java.util.stream.IntStream;
 
 /**
@@ -22,12 +23,24 @@ public class AVLTreeTest {
 
     @Test
     public void remove() {
-        System.out.println(Arrays.toString(" asd dfad  d  ".split("\\s+")));
+        HashSet<Integer> set = new HashSet<>();
+        IntStream.range(1, 10000).forEach(idx -> set.add(RandomUtils.nextInt(1, 10000)));
+        set.forEach(element -> {
+            tree.add(element, element);
+            Assert.assertTrue(tree.isBalanced());
+            Assert.assertTrue(tree.isBST());
+        });
+
+        set.forEach(element -> {
+            tree.remove(element);
+            Assert.assertTrue(tree.isBalanced());
+            Assert.assertTrue(tree.isBST());
+        });
     }
 
     @Test
     public void min() {
-        IntStream.range(1, 100000).forEach(idx -> {
+        IntStream.range(1, 10000).forEach(idx -> {
             tree.add(idx, idx);
             Assert.assertTrue(tree.isBalanced());
             Assert.assertTrue(tree.isBST());
@@ -37,15 +50,15 @@ public class AVLTreeTest {
 
     @Test
     public void contains() {
-        IntStream.range(1, 1000000).forEach(idx -> tree.add(idx, idx));
+        IntStream.range(1, 100000).forEach(idx -> tree.add(idx, idx));
         Assert.assertTrue(tree.isBalanced());
         Assert.assertTrue(tree.isBST());
-        IntStream.range(1, 1000000).forEach(idx -> Assert.assertTrue(tree.contains(idx)));
+        IntStream.range(1, 100000).forEach(idx -> Assert.assertTrue(tree.contains(idx)));
     }
 
     @Test
     public void add() {
-        IntStream.range(1, 1000000).forEach(idx -> {
+        IntStream.range(1, 10000).forEach(idx -> {
             tree.add(idx, idx);
             Assert.assertTrue(tree.isBalanced());
             Assert.assertTrue(tree.isBST());

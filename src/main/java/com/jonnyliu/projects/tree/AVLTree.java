@@ -31,41 +31,45 @@ public class AVLTree<K extends Comparable<K>, V> {
         if (node == null) {
             return null;
         }
-
+        TreeNode retNode = null;
         if (node.key.compareTo(key) > 0) {
             node.left = remove(node.left, key);
+            retNode = node;
         } else if (node.key.compareTo(key) < 0) {
             node.right = remove(node.right, key);
+            retNode = node;
         } else {
             //左子树为空
             if (node.left == null) {
                 TreeNode right = node.right;
                 node.right = null;
                 size--;
-                return right;
+                retNode = right;
             }
             //右子树为空
-            if (node.right == null) {
+            else if (node.right == null) {
                 TreeNode left = node.left;
                 node.left = null;
                 size--;
-                return left;
+                retNode = left;
             }
             //左右子树都不为空
-            if (node.left != null && node.right != null) {
+            else {
                 //比node节点大的最小值
                 TreeNode successor = min(node.right);
-                TreeNode newRoot = remove(node.right, successor.key);
+                successor.right = remove(node.right, successor.key);
                 successor.left = node.left;
-                successor.right = newRoot;
+
                 node.left = node.right = null;
-                return successor;
+                retNode = successor;
             }
         }
-        return node;
+
+        retNode = maintainTreeNodeBalance(retNode);
+        return retNode;
     }
 
-    public V min() {
+    V min() {
         if (root == null) {
             throw new IllegalArgumentException("tree is empty。");
         }
@@ -125,16 +129,21 @@ public class AVLTree<K extends Comparable<K>, V> {
             node.right = add(node.right, key, value);
         }
 
-        return maintainTreeNodeBalance(node);
+        node = maintainTreeNodeBalance(node);
+        return node;
     }
 
     /**
-     * 插入节点后维护节点的平衡性
+     * 插入/删除节点后维护节点的平衡性
      *
      * @param node 节点
      * @return
      */
     private TreeNode maintainTreeNodeBalance(TreeNode node) {
+
+        if (node == null) {
+            return null;
+        }
 
         //因为不管插入了左子树还是右子树，插入后node节点本身的高度值可能会发生变化，所以需要重新计算node当前节点的高度
         node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
