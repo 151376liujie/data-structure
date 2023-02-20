@@ -1,8 +1,7 @@
 package com.jonnyliu.projects.queue;
 
-import java.util.stream.IntStream;
-
 /**
+ * 循环队列不额外浪费一个空间的实现版本
  * Author: jonny
  * Time: 2020-03-14 16:32.
  */
@@ -30,13 +29,13 @@ public class LoopQueue<E> implements Queue<E> {
 
     public LoopQueue() {
         this(DEFAULT_CAPACITY);
-        front = 0;
-        tail = 0;
-        size = 0;
     }
 
     public LoopQueue(int capacity) {
-        data = (E[]) new Object[capacity + 1];
+        data = (E[]) new Object[capacity];
+        front = 0;
+        tail = 0;
+        size = 0;
     }
 
     /**
@@ -59,6 +58,19 @@ public class LoopQueue<E> implements Queue<E> {
         return size == 0;
     }
 
+    public static void main(String[] args) {
+        LoopQueue<Integer> queue = new LoopQueue<>();
+        for (int i = 0; i < 16; i++) {
+
+            queue.enqueue(i);
+            System.out.println("i= " + i + queue);
+            if (i % 3 == 1) {
+                queue.dequeue();
+                System.out.println(queue);
+            }
+        }
+    }
+
     /**
      * 入队
      *
@@ -67,7 +79,7 @@ public class LoopQueue<E> implements Queue<E> {
     @Override
     public void enqueue(E e) {
         //队列已满,需要扩容
-        if ((tail + 1) % data.length == front) {
+        if (getSize() >= getCapacity()) {
             resize(getCapacity() * 2);
         }
         data[tail] = e;
@@ -85,26 +97,14 @@ public class LoopQueue<E> implements Queue<E> {
             throw new IllegalArgumentException("can not dequeue from an empty queue.");
         }
         E es = data[front];
+        // 显式设置front索引所在的元素为null
+        data[front] = null;
         front = (front + 1) % data.length;
         size--;
         if (size <= getCapacity() / 4 && getCapacity() / 2 != 0) {
             resize(getCapacity() / 2);
         }
         return es;
-    }
-
-    private void resize(int newCapacity) {
-
-        if (newCapacity <= DEFAULT_CAPACITY) {
-            return;
-        }
-        E[] newData = (E[]) new Object[newCapacity + 1];
-        for (int i = 0; i < tail + data.length - front; i++) {
-            newData[i] = data[(front + i) % data.length];
-        }
-        data = newData;
-        front = 0;
-        tail = size;
     }
 
     /**
@@ -120,19 +120,35 @@ public class LoopQueue<E> implements Queue<E> {
         return data[front];
     }
 
+    private void resize(int newCapacity) {
+
+        if (newCapacity <= DEFAULT_CAPACITY) {
+            return;
+        }
+        E[] newData = (E[]) new Object[newCapacity];
+        for (int i = 0; i < size; i++) {
+            newData[i] = data[(front + i) % data.length];
+        }
+        data = newData;
+        front = 0;
+        tail = size;
+    }
+
     private int getCapacity() {
-        return data.length - 1;
+        return data.length;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(String.format("loop queue: size=%d, capacity=%d ", size, getCapacity()))
+        builder.append(
+                        String.format(" loop queue: size=%d, capacity=%d, front=%d, tail=%d ", size, getCapacity(), front,
+                                tail))
                 .append("\n")
                 .append("front [");
-        for (int i = front; i != tail; i = (i + 1) % data.length) {
-            builder.append(data[i]);
-            if ((i + 1) % data.length != tail) {
+        for (int i = 0; i < size; i++) {
+            builder.append(data[(i + front) % data.length]);
+            if ((i + front + 1) % data.length != tail) {
                 builder.append(", ");
             }
         }
@@ -140,14 +156,4 @@ public class LoopQueue<E> implements Queue<E> {
         return builder.toString();
     }
 
-
-    public static void main(String[] args) {
-        LoopQueue<Integer> queue = new LoopQueue<>();
-        IntStream.range(0, 10).forEach(queue::enqueue);
-        System.out.println(queue);
-        System.out.println(queue.dequeue() == 0);
-        System.out.println(queue);
-        System.out.println(queue.dequeue() == 1);
-        System.out.println(queue);
-    }
 }
