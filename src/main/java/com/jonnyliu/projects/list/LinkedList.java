@@ -1,6 +1,7 @@
 package com.jonnyliu.projects.list;
 
 /**
+ * 单链表,带一个虚拟头结点的链表实现
  * Author: jonny
  * Time: 2018-11-11 21:34.
  */
@@ -131,7 +132,7 @@ public class LinkedList<E> {
         }
 
         if (index < 0 || index >= size) {
-            throw new IllegalArgumentException("index illegal. must >= 0 and <= size - 1");
+            throw new IllegalArgumentException("index illegal. must >= 0 and < size");
         }
 
         Node prev = dummyHead;
@@ -195,8 +196,6 @@ public class LinkedList<E> {
         System.out.println(list.removeLast());
         System.out.println(list.removeLast());
         System.out.println(list.removeLast());
-        System.out.println(list);
-        System.out.println(list.remove(0));
         System.out.println(list);
     }
 }
