@@ -205,18 +205,9 @@ public class LinkedListWithRecursive<E> {
             return new ImmutablePair<>(node, delNode.data);
         }
 
-        // 表示当前node已经是要删除的节点的前一个节点了
-        if (index == 1) {
-            Node delNode = node.next;
-            E ele = delNode.data;
-            node.next = delNode.next;
-            delNode.next = null;
-            return new ImmutablePair<>(node, ele);
-        }
         Pair<Node, E> pair = remove(node.next, index - 1);
         node.next = pair.getKey();
-        E ele = pair.getValue();
-        return new ImmutablePair<>(node, ele);
+        return new ImmutablePair<>(node, pair.getValue());
     }
 
     public E removeFirst() {
