@@ -190,12 +190,12 @@ public class LinkedList<E> {
         list.addLast(9);
         System.out.println(list);
         list.add(list.getSize(), 89);
-        System.out.println(list);
-        System.out.println(list.removeLast());
-        System.out.println(list.removeLast());
-        System.out.println(list.removeLast());
-        System.out.println(list.removeLast());
-        System.out.println(list.removeLast());
-        System.out.println(list);
+        System.out.println("==========" + list);
+        System.out.println("remove: " + list.removeLast() + ", after removeLast: " + list);
+        System.out.println("remove: " + list.removeLast() + ", after removeLast: " + list);
+        System.out.println("remove: " + list.removeLast() + ", after removeLast: " + list);
+        System.out.println("remove: " + list.removeLast() + ", after removeLast: " + list);
+        System.out.println("remove: " + list.removeLast() + ", after removeLast: " + list);
+
     }
 }
