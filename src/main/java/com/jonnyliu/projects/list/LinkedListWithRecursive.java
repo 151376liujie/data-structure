@@ -27,46 +27,6 @@ public class LinkedListWithRecursive<E> {
         }
     }
 
-    public static void main(String[] args) {
-        LinkedListWithRecursive<Integer> list = new LinkedListWithRecursive<>();
-
-        for (int i = 0; i < 10; i++) {
-            if (i % 2 == 0) {
-                list.addFirst(i);
-                System.out.println(i + ", after add first: " + list);
-            } else {
-                list.addLast(i);
-                System.out.println(i + ", after add last: " + list);
-            }
-        }
-
-        for (int i = 0; i < list.getSize(); i++) {
-            System.out.println("index: " + i + ", element: " + list.get(i));
-        }
-
-        for (int i = 0; i < list.getSize(); i++) {
-            list.set(i, i);
-            System.out.println("index: " + i + ", after set element: " + list);
-        }
-
-        System.out.println("list contains 9 ?  " + list.contains(list.getSize() - 1));
-        System.out.println("list contains -1 ? " + list.contains(-1));
-
-        System.out.println("list: " + list);
-
-        int index = 0;
-        while (!list.isEmpty()) {
-            if (index % 2 == 0) {
-                Integer delLast = list.removeLast();
-                System.out.println("index: " + index + ", after del last: " + delLast + ", list: " + list);
-            } else {
-                Integer delFirst = list.removeFirst();
-                System.out.println("index: " + index + ", after del first: " + delFirst + ", list: " + list);
-            }
-            index++;
-        }
-    }
-
     public int getSize() {
         return size;
     }
