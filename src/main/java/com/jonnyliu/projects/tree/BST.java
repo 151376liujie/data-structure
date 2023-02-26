@@ -1,7 +1,6 @@
 package com.jonnyliu.projects.tree;
 
 import com.jonnyliu.projects.queue.ArrayQueue;
-
 import java.util.StringJoiner;
 
 /**
@@ -20,6 +19,172 @@ public class BST<E extends Comparable<E>> {
 
     public int getSize() {
         return size;
+    }
+
+
+    /**
+     * 在二分搜索树中添加一个元素data(递归实现)
+     *
+     * @param data 待添加的元素
+     */
+    public void add(E data) {
+        root = add(root, data);
+    }
+
+    /**
+     * 在以node为根的二分搜索树中插入data，并返回插入后的二分搜索树的根
+     *
+     * @param node 二分搜索树的根节点
+     * @param data 待插入的元素
+     * @return 插入后二分搜索树的根节点
+     */
+    private TreeNode add(TreeNode node, E data) {
+        //在一棵NULL树中插入元素data，则返回以data代表的根
+        if (node == null) {
+            size++;
+            return new TreeNode(data);
+        }
+        //说明🌲中已经包含该元素，直接返回即可
+        if (node.data.compareTo(data) == 0) {
+            return node;
+        }
+
+        if (node.data.compareTo(data) > 0) {
+            node.left = add(node.left, data);
+        } else {
+            node.right = add(node.right, data);
+        }
+        return node;
+    }
+
+    /**
+     * 非递归实现往二分搜索树中添加一个元素
+     *
+     * @param data 待添加的元素
+     */
+    public void addByNonRecursive(E data) {
+
+        if (root == null) {
+            root = new TreeNode(data);
+            size++;
+            return;
+        }
+        TreeNode parent = root;
+        TreeNode cur = root;
+        while (cur != null) {
+
+            if (cur.data.compareTo(data) == 0) {
+                return;
+            }
+
+            if (cur.data.compareTo(data) > 0) {
+                parent = cur;
+                cur = cur.left;
+            } else if (cur.data.compareTo(data) < 0) {
+                parent = cur;
+                cur = cur.right;
+            }
+        }
+
+        if (parent.data.compareTo(data) > 0) {
+            parent.left = new TreeNode(data);
+        } else {
+            parent.right = new TreeNode(data);
+        }
+        size++;
+    }
+
+    /**
+     * 二分搜索树中是否包含元素data
+     *
+     * @param data 元素
+     * @return true标识二分搜索树中包含该元素, 否则为false
+     */
+    public boolean contains(E data) {
+        return contains(root, data);
+    }
+
+    /**
+     * 在以node为根节点的二分搜索树中查找指定元素data
+     *
+     * @param node 二分搜索树中的根节点
+     * @param data 元素
+     * @return true标识包含, false标识不包含
+     */
+    private boolean contains(TreeNode node, E data) {
+        if (node == null) {
+            return false;
+        }
+        if (node.data.compareTo(data) == 0) {
+            return true;
+        } else if (node.data.compareTo(data) > 0) {
+            return contains(node.left, data);
+        } else {
+            return contains(node.right, data);
+        }
+    }
+
+    /**
+     * 前序遍历
+     */
+    public void preOrder() {
+        preOrder(root);
+    }
+
+    /**
+     * 前序遍历以node为根的二分搜索树
+     *
+     * @param node 二分搜索树的跟节点
+     */
+    private void preOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        System.out.println(node.data);
+        preOrder(node.left);
+        preOrder(node.right);
+    }
+
+    /**
+     * 中序遍历二分搜索树
+     */
+    public void inOrder() {
+        inOrder(root);
+    }
+
+    /**
+     * 中序遍历以node为根的二分搜索树
+     *
+     * @param node 二分搜索树的根节点
+     */
+    private void inOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        inOrder(node.left);
+        System.out.println(node.data);
+        inOrder(node.right);
+    }
+
+    /**
+     * 后序遍历二分搜索树
+     */
+    public void postOrder() {
+        postOrder(root);
+    }
+
+    /**
+     * 中序遍历以node为根节点的二分搜索树
+     *
+     * @param node 二分搜索树的根节点
+     */
+    private void postOrder(TreeNode node) {
+        if (node == null) {
+            return;
+        }
+        postOrder(node.left);
+        postOrder(node.right);
+        System.out.println(node.data);
     }
 
     public void remove(E e) {
@@ -267,127 +432,6 @@ public class BST<E extends Comparable<E>> {
             }
         }
     }
-
-    public void postOrder() {
-        postOrder(root);
-    }
-
-    private void postOrder(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-        postOrder(node.left);
-        postOrder(node.right);
-        System.out.println(node.data);
-    }
-
-    public void inOrder() {
-        inOrder(root);
-    }
-
-    private void inOrder(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-        inOrder(node.left);
-        System.out.println(node.data);
-        inOrder(node.right);
-    }
-
-    public void preOrder() {
-        preOrder(root);
-    }
-
-    private void preOrder(TreeNode node) {
-        if (node == null) {
-            return;
-        }
-        System.out.println(node.data);
-        preOrder(node.left);
-        preOrder(node.right);
-    }
-
-    public boolean contains(E data) {
-        return contains(root, data);
-    }
-
-    private boolean contains(TreeNode node, E data) {
-        if (node == null) {
-            return false;
-        }
-        if (node.data.compareTo(data) == 0) {
-            return true;
-        } else if (node.data.compareTo(data) > 0) {
-            return contains(node.left, data);
-        } else {
-            return contains(node.right, data);
-        }
-    }
-
-    public void addByNonRecursive(E data) {
-
-        if (root == null) {
-            root = new TreeNode(data);
-            size++;
-            return;
-        }
-        TreeNode parent = root;
-        TreeNode cur = root;
-        while (cur != null) {
-
-            if (cur.data.compareTo(data) == 0) {
-                return;
-            }
-
-            if (cur.data.compareTo(data) > 0) {
-                parent = cur;
-                cur = cur.left;
-            } else if (cur.data.compareTo(data) < 0) {
-                parent = cur;
-                cur = cur.right;
-            }
-        }
-
-        if (parent.data.compareTo(data) > 0) {
-            parent.left = new TreeNode(data);
-            size++;
-        } else {
-            parent.right = new TreeNode(data);
-            size++;
-        }
-
-    }
-
-    public void add(E data) {
-        root = add(root, data);
-    }
-
-    /**
-     * 在以node为根的二分搜索树中插入data，并返回插入后的二分搜索树的根
-     *
-     * @param node
-     * @param data
-     * @return
-     */
-    private TreeNode add(TreeNode node, E data) {
-        //在一棵NULL树中插入元素data，则返回以data代表的根
-        if (node == null) {
-            size++;
-            return new TreeNode(data);
-        }
-        //说明🌲中已经包含该元素，直接返回即可
-        if (node.data.compareTo(data) == 0) {
-            return node;
-        }
-
-        if (node.data.compareTo(data) > 0) {
-            node.left = add(node.left, data);
-        } else {
-            node.right = add(node.right, data);
-        }
-        return node;
-    }
-
 
     private class TreeNode {
 
