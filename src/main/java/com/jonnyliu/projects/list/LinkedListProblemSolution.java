@@ -19,22 +19,27 @@ public class LinkedListProblemSolution {
         Node head = problemSolution.buildSimpleList(list);
         System.out.println("list is " + head);
         System.out.println("list length: " + problemSolution.length(head));
-
+        System.out.println("================================================================");
         System.out.println("3 occurs in list: " + problemSolution.count(head, 3) + " times.");
+        System.out.println("================================================================");
 
         System.out.println("position 3 is " + problemSolution.getNth(head, 3));
         System.out.println("position 0 is " + problemSolution.getNth(head, 0));
+        System.out.println("================================================================");
         try {
             System.out.println("position 5 is " + problemSolution.getNth(head, 5));
         } catch (Exception e) {
             System.out.println("error expected. ☺");
         }
+        System.out.println("================================================================");
         head = problemSolution.deleteList(head);
         System.out.println("after delete list: is " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(list);
         System.out.println("list is " + head);
         System.out.println("pop head node: " + problemSolution.pop(head) + ", after pop,list: " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.deleteList(head);
         head = problemSolution.insertNth(head, 0, 1);
@@ -47,6 +52,7 @@ public class LinkedListProblemSolution {
         System.out.println("add 4 at index 3, list is " + head);
         head = problemSolution.insertNth(head, 4, 7);
         System.out.println("add 5 at index 4, list is " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.deleteList(head);
         for (int i = 0; i < 20; i++) {
@@ -63,16 +69,20 @@ public class LinkedListProblemSolution {
             }
             cur = cur.next;
         }
+        System.out.println("================================================================");
 
         LinkedListProblemSolution solution = new LinkedListProblemSolution();
         Node newList = solution.buildSimpleList(list);
+        System.out.println("================================================================");
 
         head = problemSolution.append(head, newList);
         System.out.println("after append, list is " + head);
+        System.out.println("================================================================");
 
         Pair<Node, Node> nodeNodePair = problemSolution.frontBackSplit(head);
         System.out.println("after front back split, left list is " + nodeNodePair.getLeft() + ", right list is "
                 + nodeNodePair.getRight());
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(list);
         head = problemSolution.insertNth(head, 3, 6);
@@ -80,26 +90,38 @@ public class LinkedListProblemSolution {
         Pair<Node, Node> pair = problemSolution.frontBackSplit(head);
         System.out.println(
                 "after front back split, left list is " + pair.getLeft() + ", right list is " + pair.getRight());
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 3, 5));
         System.out.println("list is " + head);
         head = problemSolution.removeDuplicates(head);
         System.out.println("after remove duplicate, list is " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(Arrays.asList(1, 1, 3, 3, 5));
         System.out.println("list is " + head);
         head = problemSolution.removeDuplicates(head);
         System.out.println("after remove duplicate, list is " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(Arrays.asList(1, 1, 1, 1, 1));
         System.out.println("list is " + head);
         head = problemSolution.removeDuplicates(head);
         System.out.println("after remove duplicate, list is " + head);
+        System.out.println("================================================================");
 
         head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 2, 2, 2));
         System.out.println("list is " + head);
         head = problemSolution.removeDuplicates(head);
         System.out.println("after remove duplicate, list is " + head);
+        System.out.println("================================================================");
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3));
+        Node target = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3));
+        Pair<Node, Node> nodePair = problemSolution.moveNode(head, target);
+        System.out.println("after move node, source list is " + nodePair.getLeft());
+        System.out.println("after move node, target list is " + nodePair.getRight());
+        System.out.println("================================================================");
 
     }
 
@@ -314,8 +336,27 @@ public class LinkedListProblemSolution {
                 next = cur.next;
             }
         }
-
         return head;
+    }
+
+    /**
+     * 将指定链表的头结点移动到目标链表的头结点
+     *
+     * @param sourceNode 源链表头结点
+     * @param targetNode 目标链表头节点
+     * @return 返回移动节点后的链表头结点
+     */
+    public Pair<Node, Node> moveNode(Node sourceNode, Node targetNode) {
+        if (sourceNode == null) {
+            throw new IllegalArgumentException("source linked-list is empty");
+        }
+        Node temp = sourceNode;
+        sourceNode = sourceNode.next;
+
+        temp.next = targetNode;
+        targetNode = temp;
+
+        return new ImmutablePair<>(sourceNode, targetNode);
     }
 
     private Node buildSimpleList(List<Integer> list) {
