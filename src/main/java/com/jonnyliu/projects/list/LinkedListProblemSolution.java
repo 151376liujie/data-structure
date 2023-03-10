@@ -153,7 +153,7 @@ public class LinkedListProblemSolution {
         System.out.println("after reverse, list is " + newHead);
 
         head = problemSolution.buildSimpleList(Arrays.asList(1));
-        System.out.println(problemSolution.reverse(head));
+        System.out.println(problemSolution.reverseUsingPointers(head));
 
     }
 
@@ -461,10 +461,6 @@ public class LinkedListProblemSolution {
     }
 
     public Node reverseUsingPointers(Node head) {
-
-        if (head == null || head.next == null) {
-            return null;
-        }
 
         Node front = null;
         Node cur = head;
