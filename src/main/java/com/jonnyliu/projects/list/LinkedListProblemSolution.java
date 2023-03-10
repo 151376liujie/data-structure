@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 /**
  * LinkedList的18个问题的算法实现
@@ -121,6 +123,27 @@ public class LinkedListProblemSolution {
         Pair<Node, Node> nodePair = problemSolution.moveNode(head, target);
         System.out.println("after move node, source list is " + nodePair.getLeft());
         System.out.println("after move node, target list is " + nodePair.getRight());
+        System.out.println("================================================================");
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 4, 5, 6, 7));
+        System.out.println("before alternative split, source list is " + head);
+        Triple<Node, Node, Node> triple = problemSolution.alternatingSplit(head, null, null);
+        System.out.println("after alternative split, source list is " + triple.getLeft());
+        System.out.println("after alternative split, left list is " + triple.getMiddle());
+        System.out.println("after alternative split, right list is " + triple.getRight());
+        System.out.println("================================================================");
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 4));
+        Node head1 = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 4));
+        //Node node = problemSolution.shuffleMerge(head, head1);
+        System.out.println("================================================================");
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 4, 5));
+        System.out.println("list1 is " + head);
+        Node head2 = problemSolution.buildSimpleList(Arrays.asList(3, 5, 6));
+        System.out.println("list2 is " + head2);
+        Node node = problemSolution.sortedIntersect(head, head2);
+        System.out.println("after intersection is " + node);
         System.out.println("================================================================");
 
     }
@@ -357,6 +380,59 @@ public class LinkedListProblemSolution {
         targetNode = temp;
 
         return new ImmutablePair<>(sourceNode, targetNode);
+    }
+
+    public Triple<Node, Node, Node> alternatingSplit(Node source, Node aRef, Node bRef) {
+        if (source == null) {
+            return null;
+        }
+        if (source.next == null) {
+            aRef = source;
+            return new ImmutableTriple<>(source, aRef, bRef);
+        }
+        Node cur = source;
+        while (cur != null) {
+            Pair<Node, Node> nodePair = moveNode(cur, aRef);
+            cur = nodePair.getLeft();
+            aRef = nodePair.getRight();
+            if (cur != null) {
+                Pair<Node, Node> nodePair2 = moveNode(cur, bRef);
+                cur = nodePair2.getLeft();
+                bRef = nodePair2.getRight();
+            }
+        }
+        return new ImmutableTriple<>(cur, aRef, bRef);
+    }
+
+    public Node shuffleMerge(Node a, Node b) {
+        // TODO
+        return null;
+    }
+
+    /**
+     * 计算给定的两个有序链表的交集并返回由交集组成的新链表
+     *
+     * @param a 有序链表1
+     * @param b 有序链表2
+     * @return 交集组成的新链表头结点(新链表也是有序的)
+     */
+    public Node sortedIntersect(Node a, Node b) {
+        Node dummyHead = new Node(-1);
+        Node cur = dummyHead;
+        while (a != null && b != null) {
+            if (a.data == b.data) {
+                cur.next = new Node(a.data);
+                cur = cur.next;
+
+                a = a.next;
+                b = b.next;
+            } else if (a.data > b.data) {
+                b = b.next;
+            } else {
+                a = a.next;
+            }
+        }
+        return dummyHead.next;
     }
 
     private Node buildSimpleList(List<Integer> list) {
