@@ -146,6 +146,15 @@ public class LinkedListProblemSolution {
         System.out.println("after intersection is " + node);
         System.out.println("================================================================");
 
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3, 4, 5));
+        System.out.println("before reverse, list is " + head);
+        //Node newHead = problemSolution.reverse(head);
+        Node newHead = problemSolution.reverseUsingPointers(head);
+        System.out.println("after reverse, list is " + newHead);
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1));
+        System.out.println(problemSolution.reverse(head));
+
     }
 
     /**
@@ -435,6 +444,50 @@ public class LinkedListProblemSolution {
         return dummyHead.next;
     }
 
+    /**
+     * 反转单链表
+     *
+     * @param head 待反转单链表的头结点
+     * @return 反转后的单链表头结点
+     */
+    public Node reverse(Node head) {
+        Node dummyHead = new Node();
+
+        while (head != null) {
+            dummyHead.next = new Node(head.data, dummyHead.next);
+            head = head.next;
+        }
+        return dummyHead.next;
+    }
+
+    public Node reverseUsingPointers(Node head) {
+
+        if (head == null || head.next == null) {
+            return null;
+        }
+
+        Node front = null;
+        Node cur = head;
+        Node back = null;
+
+        while (cur != null) {
+            back = cur.next;
+
+            cur.next = front;
+
+            front = cur;
+            cur = back;
+        }
+
+        return front;
+    }
+
+    /**
+     * 将指定的list转变为单链表
+     *
+     * @param list 待转换的列表
+     * @return 单链表
+     */
     private Node buildSimpleList(List<Integer> list) {
         Node head = null;
         for (int i = 0; i < list.size(); i++) {
