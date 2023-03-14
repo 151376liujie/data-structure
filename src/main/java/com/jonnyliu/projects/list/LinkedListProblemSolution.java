@@ -154,6 +154,10 @@ public class LinkedListProblemSolution {
 
         head = problemSolution.buildSimpleList(Arrays.asList(1));
         System.out.println(problemSolution.reverseUsingPointers(head));
+        System.out.println("================================================================");
+
+        head = problemSolution.buildSimpleList(Arrays.asList(1, 2, 3));
+        System.out.println(problemSolution.reverseUsingRecursive(head));
 
     }
 
@@ -476,6 +480,24 @@ public class LinkedListProblemSolution {
         }
 
         return front;
+    }
+
+    /**
+     * 使用递归的方式反转给定的单链表
+     *
+     * @param head 待反转的单链表头结点
+     * @return 反转后的单链表头结点
+     */
+    public Node reverseUsingRecursive(Node head) {
+
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        Node newHead = reverseUsingRecursive(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
     }
 
     /**
