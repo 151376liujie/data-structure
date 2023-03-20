@@ -1,14 +1,13 @@
 package com.jonnyliu.projects.tree;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Author: jonny
@@ -16,7 +15,7 @@ import java.util.stream.IntStream;
  */
 public class BSTTest {
 
-    BST<Integer> tree;
+    private BST<Integer> tree;
 
     @Before
     public void init() {
@@ -64,7 +63,18 @@ public class BSTTest {
         Assert.assertFalse(tree.contains(90));
 
         tree.levelOrder();
+    }
 
+    @Test
+    public void preorder() {
+        tree.add(5);
+        tree.add(8);
+        tree.add(3);
+        tree.add(1);
+        tree.add(9);
+        tree.add(4);
+
+        tree.preOrder();
     }
 
     @Test

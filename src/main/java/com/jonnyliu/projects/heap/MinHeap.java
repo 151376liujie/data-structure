@@ -4,25 +4,25 @@ import com.jonnyliu.projects.array.Array;
 import java.util.StringJoiner;
 
 /**
- * 最大堆
+ * 最小堆
  * 堆：① 完全二叉树
- * ② 父节点的值比左右子节点的值大
+ * ② 父节点的值比左右子节点的值小
  * Author: jonny
  * Time: 2020-03-21 23:49.
  */
-public class MaxHeap<E extends Comparable<E>> {
+public class MinHeap<E extends Comparable<E>> {
 
     private Array<E> data;
 
-    public MaxHeap() {
+    public MinHeap() {
         data = new Array<>();
     }
 
-    public MaxHeap(int capacity) {
+    public MinHeap(int capacity) {
         data = new Array<>(capacity);
     }
 
-    public MaxHeap(E[] arr) {
+    public MinHeap(E[] arr) {
         this.heapify(arr);
     }
 
@@ -95,7 +95,7 @@ public class MaxHeap<E extends Comparable<E>> {
             // index索引位置的父节点所在的索引位置
             int parent = parent(index);
             // 如果index索引所在的元素 小于其父节点的元素
-            if (data.get(parent).compareTo(data.get(index)) > 0) {
+            if (data.get(parent).compareTo(data.get(index)) <= 0) {
                 break;
             }
             // 交换index索引和其父节点索引所在的元素
@@ -112,16 +112,16 @@ public class MaxHeap<E extends Comparable<E>> {
     private void shiftDown(int index) {
 
         while (leftChild(index) < data.getSize()) {
-            //res 存放index下左右子树最大的索引位置
+            //res 存放index下左右子树最小的索引位置
             int left = leftChild(index);
             int right = rightChild(index);
             int res = left;
-            // 如果它有右孩子,并且它的右孩子比左孩子大
-            if (right < data.getSize() && data.get(right).compareTo(data.get(res)) > 0) {
+            // 如果它有右孩子,并且它的右孩子比左孩子小
+            if (right < data.getSize() && data.get(right).compareTo(data.get(res)) <= 0) {
                 res = right;
             }
-            //如果index位置的元素比最大的子节点还要大，说明已经遵守堆的性质
-            if (data.get(index).compareTo(data.get(res)) > 0) {
+            //如果index位置的元素比最小的子节点还要小，说明已经遵守堆的性质
+            if (data.get(index).compareTo(data.get(res)) <= 0) {
                 break;
             }
             data.swap(index, res);
@@ -179,7 +179,7 @@ public class MaxHeap<E extends Comparable<E>> {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", MaxHeap.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", MinHeap.class.getSimpleName() + "[", "]")
                 .add("data=" + data)
                 .toString();
     }

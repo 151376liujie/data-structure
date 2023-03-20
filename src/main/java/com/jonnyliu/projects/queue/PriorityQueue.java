@@ -3,6 +3,7 @@ package com.jonnyliu.projects.queue;
 import com.jonnyliu.projects.heap.MaxHeap;
 
 /**
+ * 使用最大堆来实现优先队列
  * Author: jonny
  * Time: 2020-03-22 20:03.
  */

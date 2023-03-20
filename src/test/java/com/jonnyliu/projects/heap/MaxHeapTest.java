@@ -1,5 +1,8 @@
 package com.jonnyliu.projects.heap;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.lang3.RandomUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,21 +23,27 @@ public class MaxHeapTest {
     @Test
     public void add() {
 
-        int[] array = {62, 41, 30, 28, 16, 22, 13, 19, 17, 15};
-
-        for (int i : array) {
-            heap.add(i);
+        for (int i = 0; i < 1000; i++) {
+            heap.add(RandomUtils.nextInt(0, 16384));
         }
 
         System.out.println(heap);
 
-        heap.add(52);
-        System.out.println(heap);
+        List<Integer> list = new ArrayList<>(heap.getSize());
+        for (int i = 0; i < heap.getSize(); i++) {
+            list.add(heap.remove());
+        }
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i) < list.get(i + 1)) {
+                throw new IllegalArgumentException("error: " + list.get(i) + " > " + list.get(i + 1));
+            }
+        }
     }
 
     @Test
     public void remove() {
-        int[] array = {62, 41, 30, 28, 16, 22, 13, 19, 17, 15};
+        int[] array = {13, 41, 30, 28, 16, 22, 62, 19, 17, 15};
 
         for (int i : array) {
             heap.add(i);
@@ -42,9 +51,15 @@ public class MaxHeapTest {
 
         System.out.println(heap);
 
-        for (int i = 0; i < 10; i++) {
-            System.out.println(heap.remove());
-            System.out.println(heap);
+        List<Integer> list = new ArrayList<>(heap.getSize());
+        for (int i = 0; i < heap.getSize(); i++) {
+            list.add(heap.remove());
+        }
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i) < list.get(i + 1)) {
+                throw new IllegalArgumentException("error: " + list.get(i) + " > " + list.get(i + 1));
+            }
         }
     }
 
@@ -80,8 +95,23 @@ public class MaxHeapTest {
     @Test
     public void heapify() {
 
-        Integer[] array = {41, 30, 28, 19, 16, 22, 62, 13, 17, 15};
-        heap.heapify(array);
+        Integer[] array = {13, 30, 28, 19, 16, 22, 62, 41, 17, 15};
+        heap = new MaxHeap<>(array);
         System.out.println(heap);
+
+        List<Integer> list = new ArrayList<>(heap.getSize());
+
+        int heapSize = heap.getSize();
+        for (int i = 0; i < heapSize; i++) {
+            list.add(heap.remove());
+        }
+
+        System.out.println(list);
+
+        for (int i = 0; i < list.size() - 1; i++) {
+            if (list.get(i) < list.get(i + 1)) {
+                throw new IllegalArgumentException("error");
+            }
+        }
     }
 }

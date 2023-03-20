@@ -187,10 +187,22 @@ public class BST<E extends Comparable<E>> {
         System.out.println(node.data);
     }
 
+    /**
+     * 删除二分搜索树中的元素e
+     *
+     * @param e 待删除的元素
+     */
     public void remove(E e) {
         root = remove(root, e);
     }
 
+    /**
+     * 在以node为根节点的二分搜索树中删除指定元素e，并返回删除后的二分搜索树的根
+     *
+     * @param node 二分搜索树的根节点
+     * @param e    待删除的元素
+     * @return 删除后二分搜索树的根
+     */
     private TreeNode remove(TreeNode node, E e) {
         if (node == null) {
             return null;
